@@ -11,12 +11,33 @@
 	margin-left: 50%;
 	margin-right: 50%;	
 }
+.container .table{
+	width: 80%;
+	height: 60%;
+	margin-left: 50%;
+	margin-right: 50%;	
+}
 
 /* Style the button and place it in the middle of the container/image */
 .container .start-game-button {
 	position: absolute;
 	top: 90%;
 	left: 100%;
+	transform: translate(-50%, -50%);
+	background-color: #555;
+	color: white;
+	font-size: 16px;
+	padding: 12px 24px;
+	border: none;
+	cursor: pointer;
+	border-radius: 12px;
+  }
+
+  /* Style the button and place it in the middle of the container/image */
+.container .hit-button {
+	position: absolute;
+	top: 80%;
+	left: 80%;
 	transform: translate(-50%, -50%);
 	background-color: #555;
 	color: white;

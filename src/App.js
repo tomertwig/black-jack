@@ -1,5 +1,6 @@
 import React from 'react'
 import './app.css'
+import {StartGame} from './StartGame';
 
 class AppCls extends React.Component {
 		
@@ -24,7 +25,7 @@ class AppCls extends React.Component {
 						</div>); 	
 				} 
 				else{
-					return null
+					return <StartGame/>
 				}
 		}
 }
