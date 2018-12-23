@@ -6,18 +6,26 @@ class AppCls extends React.Component {
 	constructor() {
 	  super()
 	  this.state = {
+			isGameStarted : false,
 	  }
 	}
 
 	onClickHandler = (e) => {
-		console.log('clicked');
+		this.setState({'isGameStarted':true})
 	}
 	render(){
-		return <div className='container'>
-                <button className='start-game-button' onClick={this.onClickHandler}>
-								Start Game 
-								</button> 
-						</div>; 	
+				if (!this.state.isGameStarted)
+				{
+					return (<div className='container'>
+						<img src={require('./blackjack.jpg')} />
+						<button className='start-game-button' onClick={this.onClickHandler}>
+							Start Game 
+						</button>
+						</div>); 	
+				} 
+				else{
+					return null
+				}
 		}
 }
 
