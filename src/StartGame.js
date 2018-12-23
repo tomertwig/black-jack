@@ -1,5 +1,5 @@
 import React from 'react'
-import './app.css'
+import style from './App.css'
 
 class StartGame extends React.Component {
 		

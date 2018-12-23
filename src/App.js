@@ -1,6 +1,6 @@
 import React from 'react'
-import './app.css'
 import {StartGame} from './StartGame';
+import style from './App.css'
 
 class AppCls extends React.Component {
 		
