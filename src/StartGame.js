@@ -16,8 +16,11 @@ class StartGame extends React.Component {
     
 	render(){
         return (<div className='container'>
-        <img className='table' src={require('./table.jpeg')} />
+        <img className='dealer_table' src={require('./table.jpeg')} />
+        <img className='dealer-button' src={require('./dealer.jpeg')} />
         <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
+        <button className='stand-button' onClick={this.onHitHandler}> Stand </button>
+
         </div>);
     }
 		
