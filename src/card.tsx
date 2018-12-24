@@ -24,12 +24,12 @@ class Card extends React.Component<CardProps, {}> {
                 case '♦':
                     color = 'red'
                     break;
-              }
+            }
+            
             let number = 'number ' +  color
             let suite = 'suite ' +  color
 
-            return 
-            <div className='card_border'> 
+            return <div className='card_border'> 
                 <span className={number} > {this.props.rank}</span>
                 <span className={suite}> {this.props.suite} </span>
             </div> 

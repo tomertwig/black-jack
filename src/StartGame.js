@@ -34,7 +34,6 @@ class StartGame extends React.Component {
 	onHitHandler = (e) => {
         let cards = this.state.cards;
         let card = this.getReandomCard()
-        console.log(card)
         cards.push(card)
         this.setState({cards});
     }
