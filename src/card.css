@@ -1,0 +1,35 @@
+	
+	
+	.cards{
+		display: flex; /* or inline-flex */
+		flex-direction: row;
+		margin:auto;
+		
+	}
+
+	.card{
+		display: flex; /* or inline-flex */
+	}
+	
+	.card_border{
+		display: flex; /* or inline-flex */
+		width: 60px ;
+		height: 80px;
+		border: 1px solid black;
+		margin-left: 400px;
+		margin-top: 20px;
+  }	
+
+  .number{
+		display: block;
+		font-size: 2em;
+		margin-left: 0px;
+  }
+  .suite{
+		display: block;
+		font-size: 2em;
+  }
+  
+  .red{
+	color:red;
+  }
