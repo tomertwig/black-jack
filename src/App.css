@@ -1,22 +1,24 @@
 
 .container{
-	position: relative;
-	width: 50%;
-	height: 50%;
+	display: flex;
+	flex-direction: column;
+	align-content: space-between
+	/* justify-content: stretch; */
 }
 
 .container img{
 	width: 100%;
 	height: 100%;
-	margin-left: 50%;
-	margin-right: 50%;	
+	margin-left: 0%;
+	margin-right: 0%;	
 }
+
+
 .container .dealer_table{
-	width: 80%;
-	top: 80%;
-	height: 60%;
-	margin-left: 50%;
-	margin-right: 50%;	
+	margin: auto;
+	width: 100%;
+    max-width: 1500px;
+    max-height:100%
 }
 
 /* Style the button and place it in the middle of the container/image */
@@ -36,43 +38,26 @@
 
   /* Style the button and place it in the middle of the container/image */
 .hit-button {
-	position: absolute;
-	top: 80%;
-	left: 80%;
-	transform: translate(-50%, -50%);
-	background-color: #555;
-	color: white;
-	font-size: 16px;
-	padding: 12px 24px;
-	border: none;
-	cursor: pointer;
-	border-radius: 12px;
+	order: -1;
+	align-self:  flex-start;
+	font-size: 30px;
+	align-self: flex-start
   }
 
    /* Style the button and place it in the middle of the container/image */
 .container .stand-button {
-	position: absolute;
-	top: 90%;
-	left: 80%;
-	transform: translate(-50%, -50%);
-	background-color: #555;
-	color: white;
-	font-size: 16px;
-	padding: 12px 24px;
-	border: none;
-	cursor: pointer;
-	border-radius: 12px;
+	order: -1;
+	align-self: flex-start;
+	font-size: 30px;
   }
   
   .container .dealer-button {
 	position: absolute;
-	width: 20%;
-	height: 20%;
-	top: 10%;
-	left: 40%;
+	width: 11%;
+	height: 11%;
+	top: 1%;
+	left: 51%;
 	transform: translate(-50%, -50%);
-	color: white;
-	font-size: 16px;
 	padding: 12px 24px;
 	border: none;
 	cursor: pointer;
