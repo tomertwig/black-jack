@@ -6,8 +6,17 @@ class StartGame extends React.Component {
 	constructor() {
 	  super()
 	  this.state = {
-        cards:[]
-	  }
+        participateCards:[],
+        delearCards:[],
+        standing: false
+      }
+      if (this.state.participateCards.length === 0)
+      {
+          this.hit(this.state.participateCards)
+          this.hit(this.state.delearCards)
+          this.hit(this.state.participateCards)
+      }
+
 	}
 
     getReandomCard() {
@@ -31,45 +40,96 @@ class StartGame extends React.Component {
         return {rank, suite}
     }
 
+    
 	onHitHandler = (e) => {
-        let cards = this.state.cards;
+        if (this.state.standing)
+        {
+            return;
+        }
+        let cardsInfo = this.hit(this.state.participateCards);
+        this.setState({participateCards: cardsInfo[0]})
+
+    }
+    hit(cards){
         let card = this.getReandomCard()
-        cards.push(card)
-        let sum = 0;
+        cards.push(card);      
+        let bigSum = 0;
+        let smallSum = 0;
         for (let i =0; i < cards.length; i++){
-            if (cards[i].rank === 1 || cards[i].rank > 10){
-                sum +=10;
-
-            }
+            if (cards[i].rank === 1){
+                smallSum += 1
+                bigSum += 11
+            } 
+            else if (cards[i].rank > 10)
+            {
+                smallSum += 10
+                bigSum +=10;
+            } 
             else{
-                sum += cards[i].rank;
-
+                bigSum += cards[i].rank;
+                smallSum += cards[i].rank;
             }
-            console.log(sum)
-
+            console.log(bigSum)
+            console.log(smallSum)
         }
 
-        this.setState({cards});
-        if (sum > 21){
+        if (bigSum > 21 && smallSum > 21){
             console.log('GAME OVER')
+        }
+        return [cards, smallSum, bigSum]
+    }
+
+	onStandHandler = (e) => {
+        if (this.state.standing)
+        {
+            return;
+        }
+
+        this.setState({standing: true})
+        let isParticipateWon;
+        while (true)
+        {       
+            let delearCardsInfo = this.hit(this.state.delearCards)
+           
+            let smallSum = delearCardsInfo[1]
+            let bigSum = delearCardsInfo[2]
+            if (bigSum > 16 || smallSum > 16){
+                if (bigSum > 21 && smallSum > 21)
+                {
+                    isParticipateWon = true;
+                    break;
+                }
+                else
+                {
+                    if (smallSum < 21)
+                    {
+                        
+                    }
+
+                }
+            }
+
+            
         }
     }
     
 	render(){
+       
         return (
         <div className='container'>
                 <img className='dealer-button' src={require('./dealer.jpeg')} />
                 <div className='dealer_table'>
+                    <Participate cards={this.state.delearCards} />
                     <div className='space'></div>
                     <div className='space'></div>
+                    <Participate cards={this.state.participateCards} />
                     <div className='participate_layout'>
                         <div className='buttons_layout'>
                         <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
-                        <button className='stand-button' onClick={this.onHitHandler}> Stand </button>
+                        <button className='stand-button' onClick={this.onStandHandler}> Stand </button>
                         </div>
                     </div>
                 </div>
-                <Participate cards={this.state.cards} />
         </div>);
     }
 		

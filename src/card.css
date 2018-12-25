@@ -1,9 +1,13 @@
 	
 	
 	.cards{
-		position: absolute;
+		flex-direction: column-reverse;
+
+		position: relative;
 		display: flex; /* or inline-flex */
-		top: 600px; left: 600px;
+		margin-right: auto;
+		margin-left: auto;
+		height: 200px;
 	}
 
 	.card{
@@ -15,7 +19,7 @@
 		background-color: white;
 		width: 60px ;
 		height: 80px;
-		border: 1px solid black;
+		border: 2px solid black;
 		 
   }	
 
