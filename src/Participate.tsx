@@ -15,7 +15,6 @@ class Participate extends React.Component<ParticipateProps, {} > {
             cards.push(<Card className='card' key={i} rank={this.props.cards[i].rank} suite={this.props.cards[i].suite} />)
         }
         return cards
-
     }
 
     render(){
