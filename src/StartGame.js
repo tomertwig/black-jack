@@ -8,7 +8,8 @@ class StartGame extends React.Component {
 	  this.state = {
         participateCards:[],
         delearCards:[],
-        standing: false
+        standing: false,
+        bet_amount: 0,
       }
       if (this.state.participateCards.length === 0)
       {
@@ -112,7 +113,15 @@ class StartGame extends React.Component {
             
         }
     }
-    
+
+    onBetHandler = (id) => {
+        console.log("snadler!!!")
+        console.log(id)
+        console.log(this.state.bet_amount)
+        this.setState({bet_amount: this.state.bet_amount + id})
+    }
+
+    // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
 	render(){
        
         return (
@@ -125,8 +134,17 @@ class StartGame extends React.Component {
                     <Participate cards={this.state.participateCards} />
                     <div className='participate_layout'>
                         <div className='buttons_layout'>
-                        <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
-                        <button className='stand-button' onClick={this.onStandHandler}> Stand </button>
+                            <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
+                            <button className='stand-button' onClick={this.onStandHandler}> Stand </button>
+                        </div>
+                        <div className='chips_layout'>
+                            <div className='chips'>
+                                    <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
+                                    <button className='chip-button orange' onClick={()=>this.onBetHandler(5)}> 5 </button>
+                                    <button className='chip-button green' onClick={()=>this.onBetHandler(10)}> 10 </button>
+                                    <button className='chip-button blue' onClick={()=>this.onBetHandler(25)}> 25 </button>
+                                    <button className='chip-button black' onClick={()=>this.onBetHandler(100)}> 100 </button>
+                            </div>
                         </div>
                     </div>
                 </div>
