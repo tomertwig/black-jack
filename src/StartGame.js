@@ -285,7 +285,7 @@ class StartGame extends React.Component {
                 {this.renderChips()}
                 <div className= {this.state.hasWineer != HasWineer.dealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>
                         {this.renderBetChips()}
-                </div> 
+                </div>
                 <div className='game_settings'>
                     {this.renderGameStatelayout()}
                     <div className='bet_amount'>

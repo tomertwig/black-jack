@@ -88,11 +88,16 @@ body{
 	animation-name: slide-to-pot ;
 }
 @keyframes slide-to-pot {
-  from {
+  0% {
 		left: 1000px;
 		top: 600px;
 	}
-	to {
+	99% {
+		left: 1000px;
+		top: 210px;
+    opacity: 1;
+  }
+	100% {
 		left: 1000px;
 		top: 200px;
     opacity: 0;
