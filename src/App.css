@@ -64,6 +64,9 @@
 	font-size: 30px;
   }
 
+.round-ended{
+	font-size: 40px;
+}
 .chip-button {
 	flex:1;
 	align-self:  flex-end;

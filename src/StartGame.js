@@ -9,6 +9,7 @@ class StartGame extends React.Component {
         participateCards:[],
         delearCards:[],
         standing: false,
+        roundEnded: true,
         bet_amount: 0,
       }
 	}
@@ -46,7 +47,11 @@ class StartGame extends React.Component {
         this.setState({participateCards:participateCards, delearCards:delearCards, standing:false});
     }
 
-    
+    onStartNewRound = (e) => {
+        this.startNewRound();
+        this.setState({roundEnded: false});
+    }
+
 	onHitHandler = (e) => {
         if (this.state.standing)
         {
@@ -58,7 +63,7 @@ class StartGame extends React.Component {
         
         let maxSum = this.getMaxSum(participateCards)
         if (maxSum > 21 ){
-            setTimeout(this.startNewRound, 1500)
+            this.setState({roundEnded:true})
         }
     }
 
@@ -146,7 +151,7 @@ class StartGame extends React.Component {
             setTimeout(this.pullDealerCards, 700)
         }
         else{
-            setTimeout(this.startNewRound, 1500)
+            this.setState({roundEnded:true})
         }
     }
 	onStandHandler = (e) => {
@@ -177,7 +182,7 @@ class StartGame extends React.Component {
                 <div className='dealer_table'>
                     <Participate cards={this.state.delearCards} />
                     <div className='space'></div>
-                    <div className='space'></div>
+                    {this.state.roundEnded? <button className='round-ended' onClick={this.onStartNewRound}> Start new round </button>: null}
                     <Participate cards={this.state.participateCards} />
                     <div className='participate_layout'>
                         <div className='buttons_layout'>
