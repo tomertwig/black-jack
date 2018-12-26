@@ -188,9 +188,16 @@ class StartGame extends React.Component {
         console.log("snadler!!!")
         console.log(id)
         console.log(this.state.bet_amount)
-        let bet_amount = this.state.bet_amount + id;
-        let totalChips = this.state.totalChips - id;
-        this.setState({totalChips, bet_amount})
+        if (this.state.gameStatus != GameStatus.shouldBet)
+        {
+            return;
+        }
+        if (this.state.totalChips >= id)
+        {
+            let bet_amount = this.state.bet_amount + id;
+            let totalChips = this.state.totalChips - id;
+            this.setState({totalChips, bet_amount})
+        }
     }
 
     renderGameStatelayout(){
