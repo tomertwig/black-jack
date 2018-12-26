@@ -21,8 +21,15 @@
 	background-size: cover;
 	margin: auto;
 	width: 700px;
-	height: 700px;
+	height: 600px;
 }
+
+.bet_amount{
+	background-color: white;
+	width: 120px ;
+	height: 40px;
+	border: 2px solid black;	
+  }	
 
 /* Style the button and place it in the middle of the container/image */
 .container .start-game-button {
@@ -65,6 +72,9 @@
 	font-size: 30px;
   }
 
+.round-ended{
+	font-size: 30px;
+}
 .chip-button {
 	flex:1;
 	align-self:  flex-end;
@@ -94,7 +104,7 @@
   }
 
 
-  .chips_layout {
+.chips_layout {
 	justify-content: space-between;
 }
 
