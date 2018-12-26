@@ -17,8 +17,7 @@ class AppCls extends React.Component {
 	render(){
 				if (!this.state.isGameStarted)
 				{
-					return (<div className='container'>
-						<img src={require('./blackjack.jpg')} />
+					return (<div className='container blackjack_logo'>
 						<button className='start-game-button' onClick={this.onClickHandler}>
 							Start Game 
 						</button>

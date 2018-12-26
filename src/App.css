@@ -6,22 +6,33 @@
 	flex-direction: column;
 }
 
-.container img{
-	width: 100%;
-	height: 100%;
+
+.blackjack_logo{
+	display: flex;
+	background-image: url(./blackjack_logo.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	width:894px;
+	height:894px;
+	margin-left: auto; 
+	margin-right: auto; 
+}
+
+body{
+	background-color: #0e0e0e
 }
 
 .dealer_table{
 	display: flex;
 	flex-direction: column;
-	background-image: url(./table.jpeg);
+	background-image: url(./blackjack_table_layout.svg);
 	background-repeat: no-repeat;
 	background-position: center;
-	padding-top:68px;
+	padding-top:150px;
 	background-size: cover;
 	margin: auto;
-	width: 700px;
-	height: 600px;
+	width: 100%;
+	height: 100%;
 }
 
 .bet_amount{
@@ -32,16 +43,16 @@
   }	
 
 /* Style the button and place it in the middle of the container/image */
-.container .start-game-button {
-	position: absolute;
-	top: 90%;
-	left: 100%;
-	transform: translate(-50%, -50%);
-	background-color: #555;
-	color: white;
-	font-size: 16px;
+.start-game-button {
+	margin-top: auto;
+	margin-bottom: 10%;
+	margin-left: auto; 
+	margin-right: auto; 
+	background-color: white;
+	color: red;
+	font-size: 30px;
 	padding: 12px 24px;
-	border: none;
+	border: 2px solid black;
 	cursor: pointer;
 	border-radius: 12px;
   }
@@ -73,7 +84,17 @@
   }
 
 .round-ended{
+	margin-left:0%;
 	font-size: 30px;
+	max-width:250px;
+	font-size:1.5em;
+	border:1px solid black;
+	border-bottom: 5px solid black;
+	box-shadow: 0px 3px 5px white;
+}
+
+.round-ended:hover{
+	background-color: gold;
 }
 .chip-button {
 	flex:1;
@@ -94,8 +115,7 @@
   
   .container .dealer-button {
 	
-	width: 9%;
-	height: 9%;
+	width: 4%;
 	left: 80%;
 	border: none;
 	cursor: pointer;
@@ -106,13 +126,16 @@
 
 .chips_layout {
 	justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+	margin-left:20%;
 }
 
 .chip-button {
     float: left;
-    width: 80px;
+	width: 80px;
     height: 80px;
-    margin: 30px;
+    margin: 10px;
     border-radius: 150px;
     -webkit-border-radius: 150px;
     -moz-border-radius: 150px;    

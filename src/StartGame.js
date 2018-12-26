@@ -185,9 +185,6 @@ class StartGame extends React.Component {
     }
 
     onBetHandler = (id) => {
-        console.log("snadler!!!")
-        console.log(id)
-        console.log(this.state.bet_amount)
         if (this.state.gameStatus != GameStatus.shouldBet)
         {
             return;
@@ -214,8 +211,8 @@ class StartGame extends React.Component {
             {
                 return (
                 <div className='buttons_layout'>
-                    <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
-                    <button className='stand-button' onClick={this.onStandHandler}> Stand </button> 
+                    <button className='round-ended' onClick={this.onHitHandler}> Hit </button>
+                    <button className='round-ended' onClick={this.onStandHandler}> Stand </button> 
                 </div>)
             }
         }
@@ -228,9 +225,9 @@ class StartGame extends React.Component {
                 <img className='dealer-button' src={require('./dealer.jpeg')} />
                 <div className='dealer_table'>
                     <Participate cards={this.state.delearCards} />
-                    <div className='space'></div>
-                    <Participate cards={this.state.participateCards} />
                     <div className='participate_layout'>
+                        <Participate cards={this.state.participateCards} />
+
                         {this.renderGameStatelayout()}
                         <div className='bet_amount'>
                             Current Bet: {this.state.bet_amount} Total Chips: {this.state.totalChips}
