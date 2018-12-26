@@ -2,7 +2,7 @@ import React from 'react'
 import {Participate} from './Participate.tsx'
 
 class StartGame extends React.Component {
-		
+
 	constructor() {
 	  super()
 	  this.state = {
@@ -11,13 +11,6 @@ class StartGame extends React.Component {
         standing: false,
         bet_amount: 0,
       }
-      if (this.state.participateCards.length === 0)
-      {
-          this.hit(this.state.participateCards)
-          this.hit(this.state.delearCards)
-          this.hit(this.state.participateCards)
-      }
-
 	}
 
     getReandomCard() {
@@ -41,19 +34,36 @@ class StartGame extends React.Component {
         return {rank, suite}
     }
 
+    startNewRound = () =>{
+        console.log('startNewRound')
+        let participateCards = [];
+        let delearCards = [];
+        participateCards.push(this.getReandomCard())
+        delearCards.push(this.getReandomCard())
+        participateCards.push(this.getReandomCard())
+
+        console.log(participateCards)
+        this.setState({participateCards:participateCards, delearCards:delearCards, standing:false});
+    }
+
     
 	onHitHandler = (e) => {
         if (this.state.standing)
         {
             return;
         }
-        let cardsInfo = this.hit(this.state.participateCards);
-        this.setState({participateCards: cardsInfo[0]})
-
+        let participateCards = this.state.participateCards
+        participateCards.push(this.getReandomCard())
+        this.setState({participateCards: participateCards})
+        
+        let maxSum = this.getMaxSum(participateCards)
+        if (maxSum > 21 ){
+            setTimeout(this.startNewRound, 1500)
+        }
     }
-    hit(cards){
-        let card = this.getReandomCard()
-        cards.push(card);      
+
+    getMaxSum(cards)
+    {
         let bigSum = 0;
         let smallSum = 0;
         for (let i =0; i < cards.length; i++){
@@ -70,16 +80,75 @@ class StartGame extends React.Component {
                 bigSum += cards[i].rank;
                 smallSum += cards[i].rank;
             }
-            console.log(bigSum)
-            console.log(smallSum)
         }
 
-        if (bigSum > 21 && smallSum > 21){
-            console.log('GAME OVER')
+        if (bigSum > 21)
+        {
+            return smallSum;
+        }else{
+            return bigSum;
         }
+        
+
+    }
+
+    hit(cards){
+        let card = this.getReandomCard()
+        cards.push(card);
+        let sums = this.getSums(cards)
+        let smallSum = sums[0];     
+        let bigSum = sums[1];
         return [cards, smallSum, bigSum]
     }
 
+    pullDealerCards = () => {
+        let delearCards = this.state.delearCards
+
+
+        delearCards.push(this.getReandomCard())
+
+        let maxDelearSum = this.getMaxSum(delearCards);
+        var GameStatus = Object.freeze({"none":1, "participateWon":2, "dealerWon":3, "duce":4 })       
+        let gameStatus = GameStatus.none;
+        if (maxDelearSum > 16){
+            if (maxDelearSum > 21)
+            {
+                gameStatus = GameStatus.participateWon;
+            }
+            else
+            {
+                if (maxDelearSum > 16)
+                {
+                    let maxParticipateSum = this.getMaxSum(this.state.participateCards);
+                    if (maxParticipateSum > maxDelearSum)
+                    {
+                        gameStatus = GameStatus.participateWon;
+                    }
+                    else{
+                        if (maxParticipateSum == maxDelearSum)
+                        {
+                            gameStatus = GameStatus.duce;
+                        }
+                        else{
+                            gameStatus = GameStatus.dealerWon;
+
+                        }
+                    }
+                
+                }
+
+            }
+        }
+        this.setState(delearCards)
+        
+        if (gameStatus === GameStatus.none)
+        {
+            setTimeout(this.pullDealerCards, 700)
+        }
+        else{
+            setTimeout(this.startNewRound, 1500)
+        }
+    }
 	onStandHandler = (e) => {
         if (this.state.standing)
         {
@@ -87,31 +156,10 @@ class StartGame extends React.Component {
         }
 
         this.setState({standing: true})
-        let isParticipateWon;
-        while (true)
-        {       
-            let delearCardsInfo = this.hit(this.state.delearCards)
-           
-            let smallSum = delearCardsInfo[1]
-            let bigSum = delearCardsInfo[2]
-            if (bigSum > 16 || smallSum > 16){
-                if (bigSum > 21 && smallSum > 21)
-                {
-                    isParticipateWon = true;
-                    break;
-                }
-                else
-                {
-                    if (smallSum < 21)
-                    {
-                        
-                    }
+        console.log('before loop')
 
-                }
-            }
+        this.pullDealerCards();
 
-            
-        }
     }
 
     onBetHandler = (id) => {
@@ -123,7 +171,6 @@ class StartGame extends React.Component {
 
     // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
 	render(){
-       
         return (
         <div className='container'>
                 <img className='dealer-button' src={require('./dealer.jpeg')} />
