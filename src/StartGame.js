@@ -218,6 +218,25 @@ class StartGame extends React.Component {
         }
     }
 
+    renderChips(){
+        let black_chip = this.state.totalChips >= 100 ? 'chip-button black' : 'chip-button black disabled';
+        let blue_chip = this.state.totalChips >= 25 ? 'chip-button blue' : 'chip-button blue disabled';
+        let purple_chip = this.state.totalChips >= 10 ? 'chip-button purple' : 'chip-button purple disabled';
+        let orange_chip = this.state.totalChips >= 5 ? 'chip-button orange' : 'chip-button orange disabled';
+        let red_chip = this.state.totalChips >= 1 ? 'chip-button red' : 'chip-button red disabled';
+        return (
+            <div className='chips_layout'>
+                <div className='chips'>
+                    <button className={red_chip} onClick={()=>this.onBetHandler(1)}> 1 </button>
+                    <button className={orange_chip} onClick={()=>this.onBetHandler(5)}> 5 </button>
+                    <button className={purple_chip} onClick={()=>this.onBetHandler(10)}> 10 </button>
+                    <button className={blue_chip} onClick={()=>this.onBetHandler(25)}> 25 </button>
+                    <button className={black_chip}  onClick={()=>this.onBetHandler(100)}> 100 </button>
+                </div>
+            </div>
+        )
+    }
+
     // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
 	render(){
         return (
@@ -226,15 +245,7 @@ class StartGame extends React.Component {
                     <Participate cards={this.state.delearCards} />
                     <Participate cards={this.state.participateCards} />
                 </div>
-                <div className='chips_layout'>
-                            <div className='chips'>
-                                <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
-                                <button className='chip-button orange' onClick={()=>this.onBetHandler(5)}> 5 </button>
-                                <button className='chip-button green' onClick={()=>this.onBetHandler(10)}> 10 </button>
-                                <button className='chip-button blue' onClick={()=>this.onBetHandler(25)}> 25 </button>
-                                <button className='chip-button black' onClick={()=>this.onBetHandler(100)}> 100 </button>
-                            </div>
-                </div>
+                {this.renderChips()}
                 <div className='game_settings'>
                     {this.renderGameStatelayout()}
                     <div className='bet_amount'>

@@ -149,9 +149,11 @@ body{
 
 .chip-button.blue {background: #4cc3fe }
 .chip-button.orange { background: #f7b55e }
-.chip-button.green { background: #92ed40 }
+.chip-button.purple { background: #700080 }
 .chip-button.red { background: #fd5f72 }
 .chip-button.black {background: #333 }
+
+.chip-button.disabled { opacity: 0.3 }
 
 .chip-button:hover {
 	-webkit-animation: 2s rotate-right linear infinite;
