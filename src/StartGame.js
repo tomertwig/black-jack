@@ -222,25 +222,25 @@ class StartGame extends React.Component {
 	render(){
         return (
         <div className='container'>
-                <img className='dealer-button' src={require('./dealer.jpeg')} />
                 <div className='dealer_table'>
                     <Participate cards={this.state.delearCards} />
                     <div className='participate_layout'>
                         <Participate cards={this.state.participateCards} />
-
-                        {this.renderGameStatelayout()}
-                        <div className='bet_amount'>
-                            Current Bet: {this.state.bet_amount} Total Chips: {this.state.totalChips}
+                    </div>
+                    <div className='chips_layout'>
+                        <div className='chips'>
+                            <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
+                            <button className='chip-button orange' onClick={()=>this.onBetHandler(5)}> 5 </button>
+                            <button className='chip-button green' onClick={()=>this.onBetHandler(10)}> 10 </button>
+                            <button className='chip-button blue' onClick={()=>this.onBetHandler(25)}> 25 </button>
+                            <button className='chip-button black' onClick={()=>this.onBetHandler(100)}> 100 </button>
                         </div>
-                        <div className='chips_layout'>
-                            <div className='chips'>
-                                <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
-                                <button className='chip-button orange' onClick={()=>this.onBetHandler(5)}> 5 </button>
-                                <button className='chip-button green' onClick={()=>this.onBetHandler(10)}> 10 </button>
-                                <button className='chip-button blue' onClick={()=>this.onBetHandler(25)}> 25 </button>
-                                <button className='chip-button black' onClick={()=>this.onBetHandler(100)}> 100 </button>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div className='game_settings'>
+                    {this.renderGameStatelayout()}
+                    <div className='bet_amount'>
+                                Current Bet: {this.state.bet_amount} Total Chips: {this.state.totalChips}
                     </div>
                 </div>
         </div>);

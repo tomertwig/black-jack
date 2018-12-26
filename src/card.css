@@ -1,20 +1,11 @@
 	
-	.participate_layout.cards{
-		flex-direction: row-reverse;
-		display: flex; /* or inline-flex */
-		margin-right: auto;
-		margin-left: auto;
-		height: 200px;
-		bottom: -400px;
-	}
 	
 	.cards{
 		flex-direction: row-reverse;
 		display: flex; /* or inline-flex */
 		margin-right: auto;
 		margin-left: auto;
-		height: 200px;
-		bottom: -200px;
+		margin-top: 130px;
 	}
 
 	.card{

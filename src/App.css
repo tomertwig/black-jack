@@ -1,8 +1,6 @@
 
 .container{
 	display: flex;
-	width: 100%;
-	height: 100%;
 	flex-direction: column;
 }
 
@@ -31,8 +29,8 @@ body{
 	padding-top:150px;
 	background-size: cover;
 	margin: auto;
-	width: 100%;
-	height: 100%;
+	width: 2050px;
+	height: 850px;
 }
 
 .bet_amount{
@@ -65,11 +63,14 @@ body{
 
   .chips_layout {
 	justify-content: space-between;
+	margin-bottom: 0px;
+
 }
 
   .chips {
+
 	  display: flex;
-	  flex-direction: row;
+		flex-direction: row;
   }
 
   .buttons_layout{
@@ -129,6 +130,7 @@ body{
 	display: flex;
 	flex-direction: row;
 	margin-left:20%;
+	margin-top: 180px;
 }
 
 .chip-button {
@@ -141,6 +143,8 @@ body{
     -moz-border-radius: 150px;    
 	border: 10px dotted #fff;
 	-webkit-text-fill-color: #fff;
+	border: 4px solid black;
+
 }
 
 .chip-button.blue {background: #4cc3fe }
@@ -174,4 +178,10 @@ body{
 	  -webkit-transform: rotate(360deg);
 			  transform: rotate(360deg);
 	}
-  }
+	}
+
+	.game_settings{
+		position: absolute;
+		top: 700px;
+		right: 750px;
+	}
