@@ -66,12 +66,44 @@ body{
 	margin-bottom: 0px;
 
 }
+@keyframes example {
+  0%   {background-color:red; left:0px; top:0px;}
+  25%  {background-color:yellow; left:200px; top:0px;}
+  50%  {background-color:blue; left:200px; top:200px;}
+  75%  {background-color:green; left:0px; top:200px;}
+  100% {background-color:red; left:0px; top:0px;}
+}
 
-  .chips {
+.chips_pot{
+	position: absolute;
+	transition:left 1s linear;
+	display: flex;
+	flex-direction: row;
+	left: 1000px;
+	top: 600px;
+}
 
-	  display: flex;
-		flex-direction: row;
-  }
+.lost_chips_pot{
+  animation: slide 2s 1 linear forwards;
+	animation-name: slide-to-pot ;
+}
+@keyframes slide-to-pot {
+  from {
+		left: 1000px;
+		top: 600px;
+	}
+	to {
+		left: 1000px;
+		top: 200px;
+    opacity: 0;
+    display: none;	
+	}
+}	
+
+.chips {
+	display: flex;
+	flex-direction: row;
+}
 
   .buttons_layout{
 	display: flex;
@@ -130,8 +162,21 @@ body{
 	justify-content: space-between;
 	display: flex;
 	flex-direction: row;
-	right:1100px;
-	top: 720px;
+	right:1200px;
+	top: 700px;
+}
+
+
+
+.small-chip {
+width: 20px;
+height: 20px;
+margin: 10px;
+border-radius: 150px;
+-webkit-border-radius: 150px;
+-moz-border-radius: 150px;    
+border: 10px dotted #fff;
+-webkit-text-fill-color: #fff;
 }
 
 .chip-button {
@@ -147,11 +192,11 @@ body{
 
 }
 
-.chip-button.blue {background: #4cc3fe }
-.chip-button.orange { background: #f7b55e }
-.chip-button.purple { background: #700080 }
-.chip-button.red { background: #fd5f72 }
-.chip-button.black {background: #333 }
+.blue-chip {background: #4cc3fe }
+.orange-chip { background: #f7b55e }
+.purple-chip { background: #700080 }
+.red-chip { background: #fd5f72 }
+.black-chip {background: #333 }
 
 .chip-button.disabled { opacity: 0.3 }
 
@@ -184,6 +229,6 @@ body{
 
 	.game_settings{
 		position: absolute;
-		top: 700px;
-		right: 750px;
+		top: 850px;
+		right: 1800px;
 	}

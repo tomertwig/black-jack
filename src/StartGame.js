@@ -2,6 +2,7 @@ import React from 'react'
 import {Participate} from './Participate.tsx'
 
 var GameStatus = Object.freeze({shouldBet:1, finishedBetting:2, standing:3, roundEnded:4})       
+var HasWineer = Object.freeze({none:1, participateWon:2, dealerWon:3, duce:4 })       
 
 class StartGame extends React.Component {
 
@@ -13,6 +14,8 @@ class StartGame extends React.Component {
         gameStatus: GameStatus.shouldBet,
         bet_amount: 0,
         totalChips: 200,
+        chips: {1:0, 5:0, 10:0, 25:0, 100:0},
+        hasWineer: HasWineer.none,
       }
 	}
 
@@ -38,9 +41,11 @@ class StartGame extends React.Component {
     }
 
     startBetting = () =>{
+        let hasWineer =  GameStatus.none;
+        let chips = {1:0, 5:0, 10:0, 25:0, 100:0}
         let participateCards = [];
         let delearCards = [];
-        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.shouldBet});
+        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.shouldBet, chips, hasWineer});
     }
     finishBetting = () =>{
         console.log('finishBetting')
@@ -116,7 +121,6 @@ class StartGame extends React.Component {
         delearCards.push(this.getReandomCard())
 
         let maxDelearSum = this.getMaxSum(delearCards);
-        var HasWineer = Object.freeze({"none":1, "participateWon":2, "dealerWon":3, "duce":4 })       
         let hasWineer = HasWineer.none;
         if (maxDelearSum > 16){
             if (maxDelearSum > 21)
@@ -160,8 +164,6 @@ class StartGame extends React.Component {
                 console.log(totalChips)
 
                 totalChips = totalChips + (this.state.bet_amount * 2);
-                console.log('dajsoisjdioad')
-                console.log(totalChips)
 
                 break;
             case HasWineer.duce:
@@ -169,7 +171,7 @@ class StartGame extends React.Component {
                 break;
             }
     
-        this.setState({gameStatus: GameStatus.roundEnded, bet_amount:0, delearCards:delearCards, totalChips:totalChips})
+        this.setState({gameStatus: GameStatus.roundEnded, bet_amount:0, delearCards:delearCards, totalChips:totalChips, hasWineer})
     }
 	onStandHandler = (e) => {
         if (this.state.gameStatus === GameStatus.standing)
@@ -178,8 +180,6 @@ class StartGame extends React.Component {
         }
 
         this.setState({gameStatus: GameStatus.standing})
-        console.log('before loop')
-
         this.pullDealerCards();
 
     }
@@ -191,6 +191,7 @@ class StartGame extends React.Component {
         }
         if (this.state.totalChips >= id)
         {
+            this.state.chips[id] += 1;
             let bet_amount = this.state.bet_amount + id;
             let totalChips = this.state.totalChips - id;
             this.setState({totalChips, bet_amount})
@@ -218,12 +219,44 @@ class StartGame extends React.Component {
         }
     }
 
+    
+    renderBetChips(){
+        let betChips = [];
+        for (var key in this.state.chips) {
+            console.log('key')
+
+            console.log(key)
+            for (var i = 0; i < this.state.chips[key]; i++)
+            {   
+                let colorName;
+                switch (key){
+                    case '1':
+                        colorName = 'small-chip red-chip'
+                        break;
+                    case '5':
+                        colorName = 'small-chip orange-chip'
+                        break;
+                    case '10':
+                        colorName = 'small-chip purple-chip'
+                        break;
+                    case '25':
+                        colorName = 'small-chip blue-chip'
+                        break;
+                    case '100':
+                        colorName = 'small-chip black-chip'
+                        break;
+                }
+                betChips.push(<div className={colorName} key={i}> </div>)
+            }
+        }
+        return betChips
+    }
     renderChips(){
-        let black_chip = this.state.totalChips >= 100 ? 'chip-button black' : 'chip-button black disabled';
-        let blue_chip = this.state.totalChips >= 25 ? 'chip-button blue' : 'chip-button blue disabled';
-        let purple_chip = this.state.totalChips >= 10 ? 'chip-button purple' : 'chip-button purple disabled';
-        let orange_chip = this.state.totalChips >= 5 ? 'chip-button orange' : 'chip-button orange disabled';
-        let red_chip = this.state.totalChips >= 1 ? 'chip-button red' : 'chip-button red disabled';
+        let black_chip = this.state.totalChips >= 100 ? 'chip-button black-chip' : 'chip-button black-chip disabled';
+        let blue_chip = this.state.totalChips >= 25 ? 'chip-button blue-chip' : 'chip-button blue-chip disabled';
+        let purple_chip = this.state.totalChips >= 10 ? 'chip-button purple-chip' : 'chip-button purple-chip disabled';
+        let orange_chip = this.state.totalChips >= 5 ? 'chip-button orange-chip' : 'chip-button orange-chip disabled';
+        let red_chip = this.state.totalChips >= 1 ? 'chip-button red-chip' : 'chip-button red-chip disabled';
         return (
             <div className='chips_layout'>
                 <div className='chips'>
@@ -239,6 +272,10 @@ class StartGame extends React.Component {
 
     // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
 	render(){
+        console.log('this.state.hasWineer')
+
+        console.log(this.state.hasWineer)
+
         return (
         <div className='container'>
                 <div className='dealer_table'>
@@ -246,6 +283,9 @@ class StartGame extends React.Component {
                     <Participate cards={this.state.participateCards} />
                 </div>
                 {this.renderChips()}
+                <div className= {this.state.hasWineer != HasWineer.dealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>
+                        {this.renderBetChips()}
+                </div> 
                 <div className='game_settings'>
                     {this.renderGameStatelayout()}
                     <div className='bet_amount'>
