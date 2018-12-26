@@ -65,7 +65,7 @@
   }
 
 .round-ended{
-	font-size: 40px;
+	font-size: 30px;
 }
 .chip-button {
 	flex:1;
@@ -87,7 +87,7 @@
   .container .dealer-button {
 	position: absolute;
 	width: 11%;
-	height: 11%;
+	height: 30%;
 	top: 1%;
 	left: 51%;
 	transform: translate(-50%, -50%);

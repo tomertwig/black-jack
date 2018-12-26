@@ -182,13 +182,14 @@ class StartGame extends React.Component {
                 <div className='dealer_table'>
                     <Participate cards={this.state.delearCards} />
                     <div className='space'></div>
-                    {this.state.roundEnded? <button className='round-ended' onClick={this.onStartNewRound}> Start new round </button>: null}
                     <Participate cards={this.state.participateCards} />
                     <div className='participate_layout'>
-                        <div className='buttons_layout'>
-                            <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
-                            <button className='stand-button' onClick={this.onStandHandler}> Stand </button>
-                        </div>
+                        {this.state.roundEnded?
+                             <button className='round-ended' onClick={this.onStartNewRound}> Start new round </button> :                             
+                             <div className='buttons_layout'>
+                                <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
+                                <button className='stand-button' onClick={this.onStandHandler}> Stand </button> 
+                             </div>}
                         <div className='chips_layout'>
                             <div className='chips'>
                                     <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
