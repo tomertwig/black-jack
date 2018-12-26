@@ -230,11 +230,11 @@ class StartGame extends React.Component {
                         </div>
                         <div className='chips_layout'>
                             <div className='chips'>
-                                    <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
-                                    <button className='chip-button orange' onClick={()=>this.onBetHandler(5)}> 5 </button>
-                                    <button className='chip-button green' onClick={()=>this.onBetHandler(10)}> 10 </button>
-                                    <button className='chip-button blue' onClick={()=>this.onBetHandler(25)}> 25 </button>
-                                    <button className='chip-button black' onClick={()=>this.onBetHandler(100)}> 100 </button>
+                                <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
+                                <button className='chip-button orange' onClick={()=>this.onBetHandler(5)}> 5 </button>
+                                <button className='chip-button green' onClick={()=>this.onBetHandler(10)}> 10 </button>
+                                <button className='chip-button blue' onClick={()=>this.onBetHandler(25)}> 25 </button>
+                                <button className='chip-button black' onClick={()=>this.onBetHandler(100)}> 100 </button>
                             </div>
                         </div>
                     </div>
@@ -243,5 +243,8 @@ class StartGame extends React.Component {
     }
 		
 }
+
+
+
 
 export {StartGame};
