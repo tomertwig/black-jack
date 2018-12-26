@@ -11,6 +11,7 @@ class StartGame extends React.Component {
         standing: false,
         roundEnded: true,
         bet_amount: 0,
+        totalChips: 200,
       }
 	}
 
