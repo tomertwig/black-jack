@@ -185,7 +185,9 @@ class StartGame extends React.Component {
                                 <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
                                 <button className='stand-button' onClick={this.onStandHandler}> Stand </button> 
                              </div>}
-                        <div className='bet_amount'> {this.state.bet_amount}</div>
+                        <div className='bet_amount'>
+                            Current Bet: {this.state.bet_amount} Total Chips: 0
+                        </div>
                         <div className='chips_layout'>
                             <div className='chips'>
                                     <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
