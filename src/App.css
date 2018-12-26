@@ -20,8 +20,15 @@
 	background-size: cover;
 	margin: auto;
 	width: 700px;
-	height: 700px;
+	height: 600px;
 }
+
+.bet_amount{
+	background-color: white;
+	width: 30px ;
+	height: 30px;
+	border: 2px solid black;	
+  }	
 
 /* Style the button and place it in the middle of the container/image */
 .container .start-game-button {

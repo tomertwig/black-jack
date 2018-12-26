@@ -42,15 +42,10 @@ class StartGame extends React.Component {
         participateCards.push(this.getReandomCard())
         delearCards.push(this.getReandomCard())
         participateCards.push(this.getReandomCard())
-
         console.log(participateCards)
-        this.setState({participateCards:participateCards, delearCards:delearCards, standing:false});
+        this.setState({participateCards:participateCards, delearCards:delearCards, standing:false, roundEnded: false});
     }
 
-    onStartNewRound = (e) => {
-        this.startNewRound();
-        this.setState({roundEnded: false});
-    }
 
 	onHitHandler = (e) => {
         if (this.state.standing)
@@ -185,11 +180,12 @@ class StartGame extends React.Component {
                     <Participate cards={this.state.participateCards} />
                     <div className='participate_layout'>
                         {this.state.roundEnded?
-                             <button className='round-ended' onClick={this.onStartNewRound}> Start new round </button> :                             
+                             <button className='round-ended' onClick={this.startNewRound}> Start new round </button> :                             
                              <div className='buttons_layout'>
                                 <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
                                 <button className='stand-button' onClick={this.onStandHandler}> Stand </button> 
                              </div>}
+                        <div className='bet_amount'> {this.state.bet_amount}</div>
                         <div className='chips_layout'>
                             <div className='chips'>
                                     <button className='chip-button red' onClick={()=>this.onBetHandler(1)}> 1 </button>
