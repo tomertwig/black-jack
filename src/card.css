@@ -37,3 +37,30 @@
   .red{
 	color:red;
   }
+  
+  .card-disappear{
+	animation: disappear 2s 1;
+	display: flex; /* or inline-flex */
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes disappear {
+	from{
+		flex-direction: row-reverse;
+
+		margin-right: auto;
+		margin-left: auto;
+		margin-top: 130px;
+		height: 1000px;
+	}
+	to {
+		flex-direction: row-reverse;
+		display: flex; /* or inline-flex */
+		margin-right: auto;
+		margin-left: auto;
+		margin-top: 130px;
+		height: 1000px;
+		opacity: 0;
+		display: none;	
+    }
+  }	

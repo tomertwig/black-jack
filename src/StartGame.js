@@ -201,12 +201,15 @@ class StartGame extends React.Component {
     renderGameStatelayout(){
         if (this.state.gameStatus === GameStatus.shouldBet)
         {
-            return  <button className='round-ended' onClick={this.finishBetting}>Bet</button>                     
+            if (this.state.bet_amount > 0)
+            {
+                return  <button className='round-ended' onClick={this.finishBetting}>Bet</button>                     
+            }
         }
         else{
             if  (this.state.gameStatus === GameStatus.roundEnded)
             {
-                return  <button className='round-ended' onClick={this.startBetting}> Start new round </button>                     
+                setTimeout(this.startBetting, 2000)
             }
             else
             {
@@ -275,12 +278,14 @@ class StartGame extends React.Component {
         console.log('this.state.hasWineer')
 
         console.log(this.state.hasWineer)
+        console.log('this.state.gameStatus')
+        console.log(this.state.gameStatus)
 
         return (
         <div className='container'>
                 <div className='dealer_table'>
-                    <Participate cards={this.state.delearCards} />
-                    <Participate cards={this.state.participateCards} />
+                    <Participate cards={this.state.delearCards} showCards={this.state.gameStatus != GameStatus.roundEnded} />
+                    <Participate cards={this.state.participateCards} showCards={this.state.gameStatus != GameStatus.roundEnded} />
                 </div>
                 {this.renderChips()}
                 <div className= {this.state.hasWineer != HasWineer.dealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>

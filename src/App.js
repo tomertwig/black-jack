@@ -15,17 +15,17 @@ class AppCls extends React.Component {
 		this.setState({'isGameStarted':true})
 	}
 	render(){
-				if (!this.state.isGameStarted)
-				{
-					return (<div className='container blackjack_logo'>
-						<button className='start-game-button' onClick={this.onClickHandler}>
-							Start Game 
-						</button>
-						</div>); 	
-				} 
-				else{
-					return <StartGame/>
-				}
+			if (!this.state.isGameStarted)
+			{
+				return (<div className='container blackjack_logo'>
+					<button className='start-game-button' onClick={this.onClickHandler}>
+						Start Game 
+					</button>
+					</div>); 	
+			} 
+			else{
+				return <StartGame/>
+			}
 		}
 }
 
