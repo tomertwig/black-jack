@@ -126,11 +126,12 @@ body{
 
 
 .chips_layout {
+	position: absolute;
 	justify-content: space-between;
 	display: flex;
 	flex-direction: row;
-	margin-left:20%;
-	margin-top: 180px;
+	right:1100px;
+	top: 720px;
 }
 
 .chip-button {
@@ -143,7 +144,6 @@ body{
     -moz-border-radius: 150px;    
 	border: 10px dotted #fff;
 	-webkit-text-fill-color: #fff;
-	border: 4px solid black;
 
 }
 
