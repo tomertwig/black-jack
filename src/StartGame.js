@@ -1,6 +1,8 @@
 import React from 'react'
 import {Participate} from './Participate.tsx'
 
+var GameStatus = Object.freeze({shouldBet:1, finishedBetting:2, standing:3, roundEnded:4})       
+
 class StartGame extends React.Component {
 
 	constructor() {
@@ -8,8 +10,7 @@ class StartGame extends React.Component {
 	  this.state = {
         participateCards:[],
         delearCards:[],
-        standing: false,
-        roundEnded: true,
+        gameStatus: GameStatus.shouldBet,
         bet_amount: 0,
         totalChips: 200,
       }
@@ -36,20 +37,25 @@ class StartGame extends React.Component {
         return {rank, suite}
     }
 
-    startNewRound = () =>{
-        console.log('startNewRound')
+    startBetting = () =>{
+        let participateCards = [];
+        let delearCards = [];
+        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.shouldBet});
+    }
+    finishBetting = () =>{
+        console.log('finishBetting')
         let participateCards = [];
         let delearCards = [];
         participateCards.push(this.getReandomCard())
         delearCards.push(this.getReandomCard())
         participateCards.push(this.getReandomCard())
         console.log(participateCards)
-        this.setState({participateCards:participateCards, delearCards:delearCards, standing:false, roundEnded: false});
+        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.finishedBetting});
     }
 
 
 	onHitHandler = (e) => {
-        if (this.state.standing)
+        if (this.state.gameStatus === GameStatus.standing)
         {
             return;
         }
@@ -59,7 +65,7 @@ class StartGame extends React.Component {
         
         let maxSum = this.getMaxSum(participateCards)
         if (maxSum > 21 ){
-            this.setState({roundEnded:true})
+            this.setState({gameStatus: GameStatus.roundEnded})
         }
     }
 
@@ -105,16 +111,17 @@ class StartGame extends React.Component {
     pullDealerCards = () => {
         let delearCards = this.state.delearCards
 
+        console.log('pullDealerCards')
 
         delearCards.push(this.getReandomCard())
 
         let maxDelearSum = this.getMaxSum(delearCards);
-        var GameStatus = Object.freeze({"none":1, "participateWon":2, "dealerWon":3, "duce":4 })       
-        let gameStatus = GameStatus.none;
+        var HasWineer = Object.freeze({"none":1, "participateWon":2, "dealerWon":3, "duce":4 })       
+        let hasWineer = HasWineer.none;
         if (maxDelearSum > 16){
             if (maxDelearSum > 21)
             {
-                gameStatus = GameStatus.participateWon;
+                hasWineer = HasWineer.participateWon;
             }
             else
             {
@@ -123,15 +130,15 @@ class StartGame extends React.Component {
                     let maxParticipateSum = this.getMaxSum(this.state.participateCards);
                     if (maxParticipateSum > maxDelearSum)
                     {
-                        gameStatus = GameStatus.participateWon;
+                        hasWineer = HasWineer.participateWon;
                     }
                     else{
-                        if (maxParticipateSum == maxDelearSum)
+                        if (maxParticipateSum === maxDelearSum)
                         {
-                            gameStatus = GameStatus.duce;
+                            hasWineer = HasWineer.duce;
                         }
                         else{
-                            gameStatus = GameStatus.dealerWon;
+                            hasWineer = HasWineer.dealerWon;
 
                         }
                     }
@@ -140,23 +147,37 @@ class StartGame extends React.Component {
 
             }
         }
-        this.setState(delearCards)
         
-        if (gameStatus === GameStatus.none)
-        {
-            setTimeout(this.pullDealerCards, 700)
-        }
-        else{
-            this.setState({roundEnded:true})
-        }
+        let totalChips = this.state.totalChips
+        console.log(this.state.bet_amount)
+
+        console.log(hasWineer)
+        switch(hasWineer) {
+            case HasWineer.none:
+                setTimeout(this.pullDealerCards, 700)
+                return;
+            case HasWineer.participateWon:
+                console.log(totalChips)
+
+                totalChips = totalChips + (this.state.bet_amount * 2);
+                console.log('dajsoisjdioad')
+                console.log(totalChips)
+
+                break;
+            case HasWineer.duce:
+                totalChips += this.state.bet_amount 
+                break;
+            }
+    
+        this.setState({gameStatus: GameStatus.roundEnded, bet_amount:0, delearCards:delearCards, totalChips:totalChips})
     }
 	onStandHandler = (e) => {
-        if (this.state.standing)
+        if (this.state.gameStatus === GameStatus.standing)
         {
             return;
         }
 
-        this.setState({standing: true})
+        this.setState({gameStatus: GameStatus.standing})
         console.log('before loop')
 
         this.pullDealerCards();
@@ -167,7 +188,30 @@ class StartGame extends React.Component {
         console.log("snadler!!!")
         console.log(id)
         console.log(this.state.bet_amount)
-        this.setState({bet_amount: this.state.bet_amount + id})
+        let bet_amount = this.state.bet_amount + id;
+        let totalChips = this.state.totalChips - id;
+        this.setState({totalChips, bet_amount})
+    }
+
+    renderGameStatelayout(){
+        if (this.state.gameStatus === GameStatus.shouldBet)
+        {
+            return  <button className='round-ended' onClick={this.finishBetting}>Bet</button>                     
+        }
+        else{
+            if  (this.state.gameStatus === GameStatus.roundEnded)
+            {
+                return  <button className='round-ended' onClick={this.startBetting}> Start new round </button>                     
+            }
+            else
+            {
+                return (
+                <div className='buttons_layout'>
+                    <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
+                    <button className='stand-button' onClick={this.onStandHandler}> Stand </button> 
+                </div>)
+            }
+        }
     }
 
     // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
@@ -180,14 +224,9 @@ class StartGame extends React.Component {
                     <div className='space'></div>
                     <Participate cards={this.state.participateCards} />
                     <div className='participate_layout'>
-                        {this.state.roundEnded?
-                             <button className='round-ended' onClick={this.startNewRound}> Start new round </button> :                             
-                             <div className='buttons_layout'>
-                                <button className='hit-button' onClick={this.onHitHandler}> Hit </button>
-                                <button className='stand-button' onClick={this.onStandHandler}> Stand </button> 
-                             </div>}
+                        {this.renderGameStatelayout()}
                         <div className='bet_amount'>
-                            Current Bet: {this.state.bet_amount} Total Chips: 0
+                            Current Bet: {this.state.bet_amount} Total Chips: {this.state.totalChips}
                         </div>
                         <div className='chips_layout'>
                             <div className='chips'>
