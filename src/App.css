@@ -208,14 +208,16 @@ body{
 
 .small-chip {
 margin: -15px;
-width: 20px;
-height: 20px;
+width: 40px;
+height: 40px;
 
 border-radius: 150px;
 -webkit-border-radius: 150px;
 -moz-border-radius: 150px;    
 border: 10px dotted #fff;
 -webkit-text-fill-color: #fff;
+border: 2px solid black;	
+
 }
 
 .chip-button {

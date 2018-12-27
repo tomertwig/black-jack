@@ -201,6 +201,18 @@ class StartGame extends React.Component {
         setTimeout(this.pullDealerCards, 1000)
     }
 
+    onRemoveBetHandler = (id) => {
+        if (this.state.gameStatus != GameStatus.shouldBet)
+        {
+            return;
+        }
+
+        this.state.chips[id] -= 1;
+        let bet_amount = this.state.bet_amount - id; 
+        let totalChips = this.state.totalChips + id;
+        this.setState({totalChips, bet_amount})
+    }
+
     onBetHandler = (id) => {
         if (this.state.gameStatus != GameStatus.shouldBet)
         {
@@ -262,7 +274,9 @@ class StartGame extends React.Component {
                     colorName = 'small-chip black-chip'
                     break;
             }
-            betChips.push(<div className={colorName} key={i}> </div>)
+            betChips.push(<div > 
+                            <button className={colorName} key={i} onClick={()=>this.onRemoveBetHandler(parseInt(chipNumber))}> </button>
+                         </div>)
         }
         return betChips
     }
