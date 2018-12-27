@@ -239,31 +239,40 @@ class StartGame extends React.Component {
         }
     }
 
-    
+    renderBetSameChip(chipNumber){
+        let betChips = [];
+
+        for (var i = 0; i < this.state.chips[chipNumber]; i++)
+        {   
+            let colorName;
+            switch (chipNumber){
+                case '1':
+                    colorName = 'small-chip red-chip'
+                    break;
+                case '5':
+                    colorName = 'small-chip orange-chip'
+                    break;
+                case '10':
+                    colorName = 'small-chip purple-chip'
+                    break;
+                case '25':
+                    colorName = 'small-chip blue-chip'
+                    break;
+                case '100':
+                    colorName = 'small-chip black-chip'
+                    break;
+            }
+            betChips.push(<div className={colorName} key={i}> </div>)
+        }
+        return betChips
+    }
+
     renderBetChips(){
         let betChips = [];
         for (var key in this.state.chips) {
-            for (var i = 0; i < this.state.chips[key]; i++)
-            {   
-                let colorName;
-                switch (key){
-                    case '1':
-                        colorName = 'small-chip red-chip'
-                        break;
-                    case '5':
-                        colorName = 'small-chip orange-chip'
-                        break;
-                    case '10':
-                        colorName = 'small-chip purple-chip'
-                        break;
-                    case '25':
-                        colorName = 'small-chip blue-chip'
-                        break;
-                    case '100':
-                        colorName = 'small-chip black-chip'
-                        break;
-                }
-                betChips.push(<div className={colorName} key={i}> </div>)
+            if (this.state.chips[key] > 0)
+            {
+                betChips.push(<div className={'same-chip'} key={key}> {this.renderBetSameChip(key)} </div>)
             }
         }
         return betChips
