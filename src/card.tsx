@@ -9,7 +9,6 @@ interface CardProps {
 class Card extends React.Component<CardProps, {}> {
 
 	render(){
-            console.log(this.props.suite)
             let color;
             switch(this.props.suite) {
                 case '♠':

@@ -58,14 +58,15 @@ class StartGame extends React.Component {
         this.setState({delearCards});
 
     }
-    finishBetting = () =>{
-        console.log('finishBetting')
-        
-        this.setState({ gameStatus:GameStatus.dealingCards});
-        setTimeout(this.getParticipateCard, 1000)
-        setTimeout(this.getDealerCard, 1500)
-        setTimeout(this.getParticipateCard, 2000)
-        setTimeout(this.finisedBetting, 2100)
+    finishBetting = () =>{        
+        if (this.state.bet_amount > 0)
+        {
+            this.setState({ gameStatus:GameStatus.dealingCards});
+            setTimeout(this.getParticipateCard, 800)
+            setTimeout(this.getDealerCard, 1800)
+            setTimeout(this.getParticipateCard, 2500)
+            setTimeout(this.finisedBetting, 2600)
+        }
     }
 
     finisedBetting = () =>{
@@ -83,7 +84,9 @@ class StartGame extends React.Component {
         
         let maxSum = this.getMaxSum(participateCards)
         if (maxSum > 21 ){
-            this.setState({gameStatus: GameStatus.roundEnded})
+            let hasWineer = HasWineer.dealerWon;
+
+            this.setState({gameStatus: GameStatus.roundEnded, hasWineer})
         }
     }
 
@@ -166,16 +169,13 @@ class StartGame extends React.Component {
         }
         
         let totalChips = this.state.totalChips
-        console.log(this.state.bet_amount)
 
-        console.log(hasWineer)
         switch(hasWineer) {
             case HasWineer.none:
-                setTimeout(this.pullDealerCards, 700)
+                this.setState({delearCards:delearCards})
+                setTimeout(this.pullDealerCards, 1000)
                 return;
             case HasWineer.participateWon:
-                console.log(totalChips)
-
                 totalChips = totalChips + (this.state.bet_amount * 2);
 
                 break;
@@ -183,8 +183,13 @@ class StartGame extends React.Component {
                 totalChips += this.state.bet_amount 
                 break;
             }
-    
-        this.setState({gameStatus: GameStatus.roundEnded, bet_amount:0, delearCards:delearCards, totalChips:totalChips, hasWineer})
+        this.setState({delearCards:delearCards})
+
+        setTimeout(() => {
+            this.setState({
+                gameStatus: GameStatus.roundEnded, bet_amount:0, delearCards:delearCards, totalChips:totalChips, hasWineer})},
+                1000);
+
     }
 	onStandHandler = (e) => {
         if (this.state.gameStatus === GameStatus.standing)
@@ -193,8 +198,7 @@ class StartGame extends React.Component {
         }
 
         this.setState({gameStatus: GameStatus.standing})
-        this.pullDealerCards();
-
+        setTimeout(this.pullDealerCards, 1000)
     }
 
     onBetHandler = (id) => {
@@ -224,7 +228,7 @@ class StartGame extends React.Component {
             {
                 setTimeout(this.startBetting, 2000)
             }
-            else if (this.state.gameStatus != GameStatus.dealingCards)
+            else if (this.state.gameStatus != GameStatus.dealingCards && this.state.gameStatus != GameStatus.standing )
             {
                 return (
                 <div className='buttons_layout'>
@@ -239,9 +243,6 @@ class StartGame extends React.Component {
     renderBetChips(){
         let betChips = [];
         for (var key in this.state.chips) {
-            console.log('key')
-
-            console.log(key)
             for (var i = 0; i < this.state.chips[key]; i++)
             {   
                 let colorName;
@@ -288,12 +289,6 @@ class StartGame extends React.Component {
 
     // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
 	render(){
-        console.log('this.state.hasWineer')
-
-        console.log(this.state.hasWineer)
-        console.log('this.state.gameStatus')
-        console.log(this.state.gameStatus)
-
         return (
         <div className='container'>
                 <div className='dealer_table'>
