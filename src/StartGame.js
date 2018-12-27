@@ -288,6 +288,9 @@ class StartGame extends React.Component {
                     <Participate cards={this.state.participateCards} showCards={this.state.gameStatus != GameStatus.roundEnded} />
                 </div>
                 {this.renderChips()}
+                {this.state.hasWineer === HasWineer.participateWon ?
+                 <div className= 'delear_chips_pot'> {this.renderBetChips()}</div> : null
+                }
                 <div className= {this.state.hasWineer != HasWineer.dealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>
                         {this.renderBetChips()}
                 </div>

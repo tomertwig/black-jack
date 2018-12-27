@@ -74,6 +74,34 @@ body{
   100% {background-color:red; left:0px; top:0px;}
 }
 
+.delear_chips_pot{
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	left: 1000px;
+	top: 230px;
+	animation: slide 2s 1 linear forwards;
+	animation-name: slide-to-participate ;
+}
+
+@keyframes slide-to-participate {
+  0% {
+		left: 1000px;
+		top: 300px;
+	}
+	99% {
+		left: 1000px;
+		top: 600px;
+    opacity: 1;
+  }
+	100% {
+		left: 1000px;
+		top: 610px;
+    opacity: 0;
+    display: none;	
+	}
+}	
+
 .chips_pot{
 	position: absolute;
 	transition:left 1s linear;
