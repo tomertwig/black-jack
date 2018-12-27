@@ -1,7 +1,7 @@
 import React from 'react'
 import {Participate} from './Participate.tsx'
 
-var GameStatus = Object.freeze({shouldBet:1, finishedBetting:2, standing:3, roundEnded:4})       
+var GameStatus = Object.freeze({shouldBet:1, dealingCards:2 , finishedBetting:3, standing:4, roundEnded:5})       
 var HasWineer = Object.freeze({none:1, participateWon:2, dealerWon:3, duce:4 })       
 
 class StartGame extends React.Component {
@@ -47,17 +47,30 @@ class StartGame extends React.Component {
         let delearCards = [];
         this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.shouldBet, chips, hasWineer});
     }
+    getParticipateCard = () =>{
+        let participateCards = this.state.participateCards;
+        participateCards.push(this.getReandomCard())
+        this.setState({participateCards});
+    }
+    getDealerCard = () =>{
+        let delearCards = this.state.delearCards;
+        delearCards.push(this.getReandomCard())
+        this.setState({delearCards});
+
+    }
     finishBetting = () =>{
         console.log('finishBetting')
-        let participateCards = [];
-        let delearCards = [];
-        participateCards.push(this.getReandomCard())
-        delearCards.push(this.getReandomCard())
-        participateCards.push(this.getReandomCard())
-        console.log(participateCards)
-        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.finishedBetting});
+        
+        this.setState({ gameStatus:GameStatus.dealingCards});
+        setTimeout(this.getParticipateCard, 1000)
+        setTimeout(this.getDealerCard, 1500)
+        setTimeout(this.getParticipateCard, 2000)
+        setTimeout(this.finisedBetting, 2100)
     }
 
+    finisedBetting = () =>{
+        this.setState({ gameStatus:GameStatus.finishedBetting});
+    }
 
 	onHitHandler = (e) => {
         if (this.state.gameStatus === GameStatus.standing)
@@ -211,7 +224,7 @@ class StartGame extends React.Component {
             {
                 setTimeout(this.startBetting, 2000)
             }
-            else
+            else if (this.state.gameStatus != GameStatus.dealingCards)
             {
                 return (
                 <div className='buttons_layout'>
