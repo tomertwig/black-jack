@@ -14,7 +14,7 @@ class StartGame extends React.Component {
         gameStatus: GameStatus.shouldBet,
         bet_amount: 0,
         totalChips: 200,
-        chips: {1:0, 5:0, 10:0, 25:0, 100:0},
+        chips: [],
         hasWineer: HasWineer.none,
       }
 	}
@@ -42,7 +42,7 @@ class StartGame extends React.Component {
 
     startBetting = () =>{
         let hasWineer =  GameStatus.none;
-        let chips = {1:0, 5:0, 10:0, 25:0, 100:0}
+        let chips = {}
         let participateCards = [];
         let delearCards = [];
         this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.shouldBet, chips, hasWineer});
@@ -207,23 +207,68 @@ class StartGame extends React.Component {
             return;
         }
 
-        this.state.chips[id] -= 1;
+
+        console.log('onRemoveBetHandler')
+        console.log(id)
+
+        console.log(this.state.chips)
+        var chipIndex;
+        for (var i = 0; i < this.state.chips.length; i++)
+        {
+            if (this.state.chips[i][0] == id)
+            {
+                console.log('found')
+                console.log(i)
+
+                chipIndex = i;
+                this.state.chips[i][1] -= 1;
+                break;
+            }
+        }
+
+        this.state.chips.filter(function(ele){
+            return ele[1] > 0;
+        });
+        
         let bet_amount = this.state.bet_amount - id; 
         let totalChips = this.state.totalChips + id;
         this.setState({totalChips, bet_amount})
     }
 
     onBetHandler = (id) => {
+        console.log('onBetHandler')
+        console.log(this.state.chips)
         if (this.state.gameStatus != GameStatus.shouldBet)
         {
             return;
         }
         if (this.state.totalChips >= id)
-        {
-            this.state.chips[id] += 1;
+        {   
+            var i = 0;
+            for (; i < this.state.chips.length; i++)
+            {
+                if (this.state.chips[i][0] == id)
+                {
+                    console.log('found')
+                    console.log(i)
+
+                    this.state.chips[i][1] += 1;
+                    break;
+                }
+            }
+            if (i === this.state.chips.length)
+            {
+                this.state.chips.push([id,1]);
+            }
+            
             let bet_amount = this.state.bet_amount + id;
             let totalChips = this.state.totalChips - id;
+            console.log(this.state.chips)
             this.setState({totalChips, bet_amount})
+            console.log('onBetHandler-exit')
+
+            console.log(this.state.chips)
+
         }
     }
 
@@ -253,29 +298,32 @@ class StartGame extends React.Component {
 
     renderBetSameChip(chipNumber){
         let betChips = [];
+        console.log('renderBetSameChip')
+        console.log(chipNumber)
 
-        for (var i = 0; i < this.state.chips[chipNumber]; i++)
+        for (var i = 0; i < chipNumber[1]; i++)
         {   
             let colorName;
-            switch (chipNumber){
-                case '1':
+            switch (chipNumber[0]){
+                case 1:
                     colorName = 'small-chip red-chip'
                     break;
-                case '5':
+                case 5:
                     colorName = 'small-chip orange-chip'
                     break;
-                case '10':
+                case 10:
                     colorName = 'small-chip purple-chip'
                     break;
-                case '25':
+                case 25:
                     colorName = 'small-chip blue-chip'
                     break;
-                case '100':
+                case 100:
                     colorName = 'small-chip black-chip'
                     break;
             }
+            console.log(colorName)
             betChips.push(<div > 
-                            <button className={colorName} key={i} onClick={()=>this.onRemoveBetHandler(parseInt(chipNumber))}> </button>
+                            <button className={colorName} key={i} onClick={()=>this.onRemoveBetHandler(chipNumber[0])}> </button>
                          </div>)
         }
         return betChips
@@ -283,10 +331,14 @@ class StartGame extends React.Component {
 
     renderBetChips(){
         let betChips = [];
-        for (var key in this.state.chips) {
-            if (this.state.chips[key] > 0)
+        console.log('cjidjsocjid')
+        console.log(this.state.chips)
+
+        for (var i = 0; i < this.state.chips.length; i++) {
+            var elem = this.state.chips[i];
+            if (elem[1] > 0)
             {
-                betChips.push(<div className={'same-chip'} key={key}> {this.renderBetSameChip(key)} </div>)
+                betChips.push(<div className={'same-chip'} key={i}> {this.renderBetSameChip(elem)} </div>)
             }
         }
         return betChips
