@@ -47,11 +47,11 @@ class StartGame extends React.Component {
     }
 
     startBetting = () =>{
-        let roundResult = RoundResult.none;
         let potChips = []
         let participateCards = [];
         let delearCards = [];
         this.state.roundInfo.stage = RoundStage.Betting;
+        his.state.roundInfo.result = RoundResult.none
         this.setState({participateCards:participateCards, delearCards:delearCards, potChips});
     }
     getParticipateCard = () =>{
