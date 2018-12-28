@@ -34,9 +34,10 @@ body{
 }
 
 .bet_amount{
+	font-size	: 30px;
 	background-color: white;
-	width: 120px ;
-	height: 40px;
+	width: 320px ;
+	height: 80px;
 	border: 2px solid black;	
   }	
 
@@ -143,15 +144,20 @@ body{
   .buttons_layout{
 	display: flex;
 	flex-direction: row;
+	width: 320px ;
+	height: 80px;
+
+
   }
   /* Style the button and place it in the middle of the container/image */
 .hit-button {
 	flex:1;
-	align-self:  flex-start;
-	font-size: 30px;
-  }
+	font-size: 30px;	
+}
 
 .round-ended{
+	background-color:#D0D0D0;
+
 	margin-left:0%;
 	font-size: 30px;
 	max-width:250px;
@@ -173,7 +179,6 @@ body{
 /* Style the button and place it in the middle of the container/image */
 .container .stand-button {
 	flex:1;
-	align-self: flex-start;
 	font-size: 30px;
   }
   

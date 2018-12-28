@@ -86,7 +86,7 @@ class StartGame extends React.Component {
         if (maxSum > 21 ){
             let hasWineer = HasWineer.dealerWon;
 
-            this.setState({gameStatus: GameStatus.roundEnded, hasWineer})
+            this.setState({gameStatus: GameStatus.roundEnded, hasWineer, bet_amount:0})
         }
     }
 
@@ -328,7 +328,9 @@ class StartGame extends React.Component {
                 <div className='game_settings'>
                     {this.renderGameStatelayout()}
                     <div className='bet_amount'>
-                                Current Bet: {this.state.bet_amount} Total Chips: {this.state.totalChips}
+                                Current Bet: {this.state.bet_amount}
+                                <div/>
+                                Total Chips: {this.state.totalChips}
                     </div>
                 </div>
         </div>);
