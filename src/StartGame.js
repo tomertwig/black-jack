@@ -192,7 +192,7 @@ class StartGame extends React.Component {
         
         setTimeout(() => {
             this.setState({
-                gameStatus: GameStatus.roundEndedStage, totalChips:totalChips, roundResult, potChips:[]})},
+                gameStatus: GameStatus.roundEndedStage, totalChips:totalChips, roundResult})},
                 1000);
 
     }
@@ -284,7 +284,7 @@ class StartGame extends React.Component {
         else{
             if  (this.state.gameStatus === GameStatus.roundEndedStage)
             {
-                setTimeout(this.startBetting, 5000)
+                setTimeout(this.startBetting, 2000)
             }
             else if (this.state.gameStatus != GameStatus.dealingCardsStage && this.state.gameStatus != GameStatus.standingStage )
             {
