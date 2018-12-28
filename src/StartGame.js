@@ -1,8 +1,8 @@
 import React from 'react'
 import {Participate} from './Participate.tsx'
 
-var GameStatus = Object.freeze({betStage:1, dealingCardsStage:2 , hitOrStandStage:3, standingStage:4, roundEndedStage:5})       
-var RoundResult = Object.freeze({none:1, participateWon:2, dealerWon:3, duce:4 })       
+var RoundStage = Object.freeze({Betting:1, DealingCards:2 , HitOrStand:3, Standing:4, RoundEnded:5})       
+var RoundResult = Object.freeze({None:1, ParticipateWon:2, DealerWon:3, Duce:4 })       
 
 class StartGame extends React.Component {
 
@@ -11,10 +11,9 @@ class StartGame extends React.Component {
 	  this.state = {
         participateCards:[],
         delearCards:[],
-        gameStatus: GameStatus.betStage,
+        roundInfo : {stage: RoundStage.Betting, result: RoundResult.none},
         totalChips: 200,
         potChips: [],
-        roundResult: RoundResult.none,
       }
 	}
 
@@ -52,7 +51,8 @@ class StartGame extends React.Component {
         let potChips = []
         let participateCards = [];
         let delearCards = [];
-        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.betStage, potChips, roundResult});
+        this.state.roundInfo.stage = RoundStage.Betting;
+        this.setState({participateCards:participateCards, delearCards:delearCards, potChips});
     }
     getParticipateCard = () =>{
         let participateCards = this.state.participateCards;
@@ -68,7 +68,8 @@ class StartGame extends React.Component {
     finishBetting = () =>{        
         if (this.state.potChips.length > 0)
         {
-            this.setState({ gameStatus:GameStatus.dealingCardsStage});
+            this.state.roundInfo.stage = RoundStage.DealingCards;
+            this.setState({roundInfo:this.state.roundInfo});
             setTimeout(this.getParticipateCard, 800)
             setTimeout(this.getDealerCard, 1800)
             setTimeout(this.getParticipateCard, 2500)
@@ -77,11 +78,12 @@ class StartGame extends React.Component {
     }
 
     moveToHitOrStandStage = () =>{
-        this.setState({gameStatus:GameStatus.hitOrStandStage});
+        this.state.roundInfo.stage = RoundStage.HitOrStand;
+        this.setState({roundInfo:this.state.roundInfo});
     }
 
 	onHitHandler = (e) => {
-        if (this.state.gameStatus === GameStatus.standingStage)
+        if (this.state.roundInfo.stage === RoundStage.S)
         {
             return;
         }
@@ -91,9 +93,9 @@ class StartGame extends React.Component {
         
         let maxSum = this.getMaxSum(participateCards)
         if (maxSum > 21 ){
-            let roundResult = RoundResult.dealerWon;
-
-            this.setState({gameStatus: GameStatus.roundEndedStage, roundResult})
+            this.state.roundInfo.stage = RoundStage.R;
+            this.state.roundInfo.result =RoundResult.DealerWon;
+            this.setState({roundInfo:this.state.roundInfo});
         }
     }
 
@@ -148,7 +150,7 @@ class StartGame extends React.Component {
         if (maxDelearSum > 16){
             if (maxDelearSum > 21)
             {
-                roundResult = RoundResult.participateWon;
+                roundResult = RoundResult.ParticipateWon;
             }
             else
             {
@@ -157,15 +159,15 @@ class StartGame extends React.Component {
                     let maxParticipateSum = this.getMaxSum(this.state.participateCards);
                     if (maxParticipateSum > maxDelearSum)
                     {
-                        roundResult = RoundResult.participateWon;
+                        roundResult = RoundResult.ParticipateWon;
                     }
                     else{
                         if (maxParticipateSum === maxDelearSum)
                         {
-                            roundResult = RoundResult.duce;
+                            roundResult = RoundResult.Duce;
                         }
                         else{
-                            roundResult = RoundResult.dealerWon;
+                            roundResult = RoundResult.DealerWon;
                         }
                     }
                 
@@ -182,32 +184,32 @@ class StartGame extends React.Component {
             case RoundResult.none:
                 setTimeout(this.pullDealerCards, 1000)
                 return;
-            case RoundResult.participateWon:
+            case RoundResult.ParticipateWon:
                 totalChips = totalChips + (this.getTotalPotChips() * 2);
                 break;
-            case RoundResult.duce:
+            case RoundResult.Duce:
                 totalChips += this.getTotalPotChips()
                 break;
         }
         
         setTimeout(() => {
-            this.setState({
-                gameStatus: GameStatus.roundEndedStage, totalChips:totalChips, roundResult})},
-                1000);
-
+            this.state.roundInfo.stage = RoundStage.R;
+            this.state.roundInfo.result = roundResult;
+            this.setState({totalChips:totalChips})}, 1000);
     }
 	onStandHandler = (e) => {
-        if (this.state.gameStatus === GameStatus.standingStage)
+        if (this.state.roundInfo.stage === RoundStage.Standing)
         {
             return;
         }
 
-        this.setState({gameStatus: GameStatus.standingStage})
+        this.state.roundInfo.stage = RoundStage.Standing;
+        this.setState({})
         setTimeout(this.pullDealerCards, 1000)
     }
 
     onRemoveBetHandler = (id) => {
-        if (this.state.gameStatus != GameStatus.betStage)
+        if (this.state.roundInfo.stage != RoundStage.Betting)
         {
             return;
         }
@@ -242,8 +244,8 @@ class StartGame extends React.Component {
     onBetHandler = (id) => {
         console.log('onBetHandler')
         console.log(this.state.potChips)
-
-        if (this.state.gameStatus != GameStatus.betStage)
+        console.log(this.state.roundInfo.stage)
+        if (this.state.roundInfo.stage != RoundStage.Betting)
         {
             return;
         }
@@ -269,12 +271,11 @@ class StartGame extends React.Component {
 
             let totalChips = this.state.totalChips - id;
             this.setState({totalChips})
-
         }
     }
 
     renderGameStatelayout(){
-        if (this.state.gameStatus === GameStatus.betStage)
+        if (this.state.roundInfo.stage === RoundStage.Betting)
         {
             if (this.getTotalPotChips() > 0)
             {
@@ -282,11 +283,11 @@ class StartGame extends React.Component {
             }
         }
         else{
-            if  (this.state.gameStatus === GameStatus.roundEndedStage)
+            if  (this.state.roundInfo.stage === RoundStage.R)
             {
                 setTimeout(this.startBetting, 2000)
             }
-            else if (this.state.gameStatus != GameStatus.dealingCardsStage && this.state.gameStatus != GameStatus.standingStage )
+            else if (this.state.roundInfo.stage != RoundStage.DealingCards && this.state.roundInfo.stage != RoundStage.Standing )
             {
                 return (
                 <div className='buttons_layout'>
@@ -365,18 +366,18 @@ class StartGame extends React.Component {
 	render(){
         console.log('this.state.roundResult')
 
-        console.log(this.state.roundResult)
+        console.log(this.state.roundInfo.result)
         return (
         <div className='container'>
                 <div className='dealer_table'>
-                    <Participate cards={this.state.delearCards} showCards={this.state.gameStatus != GameStatus.roundEndedStage} />
-                    <Participate cards={this.state.participateCards} showCards={this.state.gameStatus != GameStatus.roundEndedStage} />
+                    <Participate cards={this.state.delearCards} showCards={this.state.roundInfo.stage != RoundStage.R} />
+                    <Participate cards={this.state.participateCards} showCards={this.state.roundInfo.stage != RoundStage.R} />
                 </div>
                 {this.renderChips()}
-                {this.state.roundResult === RoundResult.participateWon ?
+                {this.state.roundInfo.result=== RoundResult.ParticipateWon ?
                  <div className= 'delear_chips_pot'> {this.renderBetChips()}</div> : null
                 }
-                <div className= {this.state.roundResult != RoundResult.dealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>
+                <div className= {this.state.roundInfo.result != RoundResult.DealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>
                         {this.renderBetChips()}
                 </div>
                 <div className='game_settings'>
