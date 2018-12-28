@@ -2,7 +2,7 @@ import React from 'react'
 import {Participate} from './Participate.tsx'
 
 var GameStatus = Object.freeze({betStage:1, dealingCardsStage:2 , hitOrStandStage:3, standingStage:4, roundEndedStage:5})       
-var HasWineer = Object.freeze({none:1, participateWon:2, dealerWon:3, duce:4 })       
+var RoundResult = Object.freeze({none:1, participateWon:2, dealerWon:3, duce:4 })       
 
 class StartGame extends React.Component {
 
@@ -14,7 +14,7 @@ class StartGame extends React.Component {
         gameStatus: GameStatus.betStage,
         totalChips: 200,
         potChips: [],
-        hasWineer: HasWineer.none,
+        roundResult: RoundResult.none,
       }
 	}
 
@@ -48,11 +48,11 @@ class StartGame extends React.Component {
     }
 
     startBetting = () =>{
-        let hasWineer =  GameStatus.none;
+        let roundResult = RoundResult.none;
         let potChips = []
         let participateCards = [];
         let delearCards = [];
-        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.betStage, potChips, hasWineer});
+        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.betStage, potChips, roundResult});
     }
     getParticipateCard = () =>{
         let participateCards = this.state.participateCards;
@@ -91,9 +91,9 @@ class StartGame extends React.Component {
         
         let maxSum = this.getMaxSum(participateCards)
         if (maxSum > 21 ){
-            let hasWineer = HasWineer.dealerWon;
+            let roundResult = RoundResult.dealerWon;
 
-            this.setState({gameStatus: GameStatus.roundEndedStage, hasWineer})
+            this.setState({gameStatus: GameStatus.roundEndedStage, roundResult})
         }
     }
 
@@ -144,11 +144,11 @@ class StartGame extends React.Component {
         delearCards.push(this.getReandomCard())
 
         let maxDelearSum = this.getMaxSum(delearCards);
-        let hasWineer = HasWineer.none;
+        let roundResult = RoundResult.none;
         if (maxDelearSum > 16){
             if (maxDelearSum > 21)
             {
-                hasWineer = HasWineer.participateWon;
+                roundResult = RoundResult.participateWon;
             }
             else
             {
@@ -157,16 +157,15 @@ class StartGame extends React.Component {
                     let maxParticipateSum = this.getMaxSum(this.state.participateCards);
                     if (maxParticipateSum > maxDelearSum)
                     {
-                        hasWineer = HasWineer.participateWon;
+                        roundResult = RoundResult.participateWon;
                     }
                     else{
                         if (maxParticipateSum === maxDelearSum)
                         {
-                            hasWineer = HasWineer.duce;
+                            roundResult = RoundResult.duce;
                         }
                         else{
-                            hasWineer = HasWineer.dealerWon;
-
+                            roundResult = RoundResult.dealerWon;
                         }
                     }
                 
@@ -177,24 +176,23 @@ class StartGame extends React.Component {
         
         let totalChips = this.state.totalChips
 
-        switch(hasWineer) {
-            case HasWineer.none:
-                this.setState({delearCards:delearCards})
+        this.setState({delearCards:delearCards})
+
+        switch(roundResult) {
+            case RoundResult.none:
                 setTimeout(this.pullDealerCards, 1000)
                 return;
-            case HasWineer.participateWon:
+            case RoundResult.participateWon:
                 totalChips = totalChips + (this.getTotalPotChips() * 2);
-
                 break;
-            case HasWineer.duce:
+            case RoundResult.duce:
                 totalChips += this.getTotalPotChips()
                 break;
-            }
-        this.setState({delearCards:delearCards})
+        }
         
         setTimeout(() => {
             this.setState({
-                gameStatus: GameStatus.roundEndedStage, delearCards:delearCards, totalChips:totalChips, hasWineer, potChips:[]})},
+                gameStatus: GameStatus.roundEndedStage, totalChips:totalChips, roundResult, potChips:[]})},
                 1000);
 
     }
@@ -286,7 +284,7 @@ class StartGame extends React.Component {
         else{
             if  (this.state.gameStatus === GameStatus.roundEndedStage)
             {
-                setTimeout(this.startBetting, 2000)
+                setTimeout(this.startBetting, 5000)
             }
             else if (this.state.gameStatus != GameStatus.dealingCardsStage && this.state.gameStatus != GameStatus.standingStage )
             {
@@ -365,6 +363,9 @@ class StartGame extends React.Component {
 
     // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
 	render(){
+        console.log('this.state.roundResult')
+
+        console.log(this.state.roundResult)
         return (
         <div className='container'>
                 <div className='dealer_table'>
@@ -372,10 +373,10 @@ class StartGame extends React.Component {
                     <Participate cards={this.state.participateCards} showCards={this.state.gameStatus != GameStatus.roundEndedStage} />
                 </div>
                 {this.renderChips()}
-                {this.state.hasWineer === HasWineer.participateWon ?
+                {this.state.roundResult === RoundResult.participateWon ?
                  <div className= 'delear_chips_pot'> {this.renderBetChips()}</div> : null
                 }
-                <div className= {this.state.hasWineer != HasWineer.dealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>
+                <div className= {this.state.roundResult != RoundResult.dealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>
                         {this.renderBetChips()}
                 </div>
                 <div className='game_settings'>
