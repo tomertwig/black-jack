@@ -1,7 +1,7 @@
 import React from 'react'
 import {Participate} from './Participate.tsx'
 
-var GameStatus = Object.freeze({shouldBet:1, dealingCards:2 , finishedBetting:3, standing:4, roundEnded:5})       
+var GameStatus = Object.freeze({betStage:1, dealingCardsStage:2 , hitOrStandStage:3, standingStage:4, roundEndedStage:5})       
 var HasWineer = Object.freeze({none:1, participateWon:2, dealerWon:3, duce:4 })       
 
 class StartGame extends React.Component {
@@ -11,13 +11,20 @@ class StartGame extends React.Component {
 	  this.state = {
         participateCards:[],
         delearCards:[],
-        gameStatus: GameStatus.shouldBet,
-        bet_amount: 0,
+        gameStatus: GameStatus.betStage,
         totalChips: 200,
-        chips: [],
+        potChips: [],
         hasWineer: HasWineer.none,
       }
 	}
+
+    getTotalPotChips(){
+        let totalPotChips = 0;
+        for (let i =0; i < this.state.potChips.length; i++){
+            totalPotChips += (this.state.potChips[i][0]*this.state.potChips[i][1]); 
+        }
+        return totalPotChips;
+    }
 
     getReandomCard() {
         let rank = Math.floor((Math.random() * 13) + 1);
@@ -42,10 +49,10 @@ class StartGame extends React.Component {
 
     startBetting = () =>{
         let hasWineer =  GameStatus.none;
-        let chips = {}
+        let potChips = []
         let participateCards = [];
         let delearCards = [];
-        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.shouldBet, chips, hasWineer});
+        this.setState({participateCards:participateCards, delearCards:delearCards, gameStatus:GameStatus.betStage, potChips, hasWineer});
     }
     getParticipateCard = () =>{
         let participateCards = this.state.participateCards;
@@ -59,22 +66,22 @@ class StartGame extends React.Component {
 
     }
     finishBetting = () =>{        
-        if (this.state.bet_amount > 0)
+        if (this.state.potChips.length > 0)
         {
-            this.setState({ gameStatus:GameStatus.dealingCards});
+            this.setState({ gameStatus:GameStatus.dealingCardsStage});
             setTimeout(this.getParticipateCard, 800)
             setTimeout(this.getDealerCard, 1800)
             setTimeout(this.getParticipateCard, 2500)
-            setTimeout(this.finisedBetting, 2600)
+            setTimeout(this.moveToHitOrStandStage, 2600)
         }
     }
 
-    finisedBetting = () =>{
-        this.setState({ gameStatus:GameStatus.finishedBetting});
+    moveToHitOrStandStage = () =>{
+        this.setState({gameStatus:GameStatus.hitOrStandStage});
     }
 
 	onHitHandler = (e) => {
-        if (this.state.gameStatus === GameStatus.standing)
+        if (this.state.gameStatus === GameStatus.standingStage)
         {
             return;
         }
@@ -86,7 +93,7 @@ class StartGame extends React.Component {
         if (maxSum > 21 ){
             let hasWineer = HasWineer.dealerWon;
 
-            this.setState({gameStatus: GameStatus.roundEnded, hasWineer, bet_amount:0})
+            this.setState({gameStatus: GameStatus.roundEndedStage, hasWineer})
         }
     }
 
@@ -176,33 +183,33 @@ class StartGame extends React.Component {
                 setTimeout(this.pullDealerCards, 1000)
                 return;
             case HasWineer.participateWon:
-                totalChips = totalChips + (this.state.bet_amount * 2);
+                totalChips = totalChips + (this.getTotalPotChips() * 2);
 
                 break;
             case HasWineer.duce:
-                totalChips += this.state.bet_amount 
+                totalChips += this.getTotalPotChips()
                 break;
             }
         this.setState({delearCards:delearCards})
-
+        
         setTimeout(() => {
             this.setState({
-                gameStatus: GameStatus.roundEnded, bet_amount:0, delearCards:delearCards, totalChips:totalChips, hasWineer})},
+                gameStatus: GameStatus.roundEndedStage, delearCards:delearCards, totalChips:totalChips, hasWineer, potChips:[]})},
                 1000);
 
     }
 	onStandHandler = (e) => {
-        if (this.state.gameStatus === GameStatus.standing)
+        if (this.state.gameStatus === GameStatus.standingStage)
         {
             return;
         }
 
-        this.setState({gameStatus: GameStatus.standing})
+        this.setState({gameStatus: GameStatus.standingStage})
         setTimeout(this.pullDealerCards, 1000)
     }
 
     onRemoveBetHandler = (id) => {
-        if (this.state.gameStatus != GameStatus.shouldBet)
+        if (this.state.gameStatus != GameStatus.betStage)
         {
             return;
         }
@@ -211,81 +218,77 @@ class StartGame extends React.Component {
         console.log('onRemoveBetHandler')
         console.log(id)
 
-        console.log(this.state.chips)
+        console.log(this.state.potChips)
         var chipIndex;
-        for (var i = 0; i < this.state.chips.length; i++)
+        for (var i = 0; i < this.state.potChips.length; i++)
         {
-            if (this.state.chips[i][0] == id)
+            if (this.state.potChips[i][0] == id)
             {
                 console.log('found')
                 console.log(i)
 
                 chipIndex = i;
-                this.state.chips[i][1] -= 1;
+                this.state.potChips[i][1] -= 1;
                 break;
             }
         }
 
-        this.state.chips.filter(function(ele){
+        this.state.potChips.filter(function(ele){
             return ele[1] > 0;
         });
-        
-        let bet_amount = this.state.bet_amount - id; 
+
         let totalChips = this.state.totalChips + id;
-        this.setState({totalChips, bet_amount})
+        this.setState({totalChips})
     }
 
     onBetHandler = (id) => {
         console.log('onBetHandler')
-        console.log(this.state.chips)
-        if (this.state.gameStatus != GameStatus.shouldBet)
+        console.log(this.state.potChips)
+
+        if (this.state.gameStatus != GameStatus.betStage)
         {
             return;
         }
         if (this.state.totalChips >= id)
         {   
             var i = 0;
-            for (; i < this.state.chips.length; i++)
+            for (; i < this.state.potChips.length; i++)
             {
-                if (this.state.chips[i][0] == id)
+                if (this.state.potChips[i][0] == id)
                 {
                     console.log('found')
                     console.log(i)
 
-                    this.state.chips[i][1] += 1;
+                    this.state.potChips[i][1] += 1;
                     break;
                 }
             }
-            if (i === this.state.chips.length)
+            if (i === this.state.potChips.length)
             {
-                this.state.chips.push([id,1]);
+                this.state.potChips.push([id,1]);
             }
-            
-            let bet_amount = this.state.bet_amount + id;
-            let totalChips = this.state.totalChips - id;
-            console.log(this.state.chips)
-            this.setState({totalChips, bet_amount})
-            console.log('onBetHandler-exit')
+            console.log(this.state.potChips)
 
-            console.log(this.state.chips)
+            let totalChips = this.state.totalChips - id;
+            this.setState({totalChips})
 
         }
     }
 
     renderGameStatelayout(){
-        if (this.state.gameStatus === GameStatus.shouldBet)
+        if (this.state.gameStatus === GameStatus.betStage)
         {
-            if (this.state.bet_amount > 0)
+            if (this.getTotalPotChips() > 0)
             {
                 return  <button className='round-ended' onClick={this.finishBetting}>Bet</button>                     
             }
         }
         else{
-            if  (this.state.gameStatus === GameStatus.roundEnded)
+            if  (this.state.gameStatus === GameStatus.roundEndedStage)
             {
                 setTimeout(this.startBetting, 2000)
             }
-            else if (this.state.gameStatus != GameStatus.dealingCards && this.state.gameStatus != GameStatus.standing )
+            else if (this.state.gameStatus != GameStatus.dealingCardsStage && this.state.gameStatus != GameStatus.standingStage )
             {
                 return (
                 <div className='buttons_layout'>
@@ -331,11 +334,9 @@ class StartGame extends React.Component {
 
     renderBetChips(){
         let betChips = [];
-        console.log('cjidjsocjid')
-        console.log(this.state.chips)
 
-        for (var i = 0; i < this.state.chips.length; i++) {
-            var elem = this.state.chips[i];
+        for (var i = 0; i < this.state.potChips.length; i++) {
+            var elem = this.state.potChips[i];
             if (elem[1] > 0)
             {
                 betChips.push(<div className={'same-chip'} key={i}> {this.renderBetSameChip(elem)} </div>)
@@ -367,8 +368,8 @@ class StartGame extends React.Component {
         return (
         <div className='container'>
                 <div className='dealer_table'>
-                    <Participate cards={this.state.delearCards} showCards={this.state.gameStatus != GameStatus.roundEnded} />
-                    <Participate cards={this.state.participateCards} showCards={this.state.gameStatus != GameStatus.roundEnded} />
+                    <Participate cards={this.state.delearCards} showCards={this.state.gameStatus != GameStatus.roundEndedStage} />
+                    <Participate cards={this.state.participateCards} showCards={this.state.gameStatus != GameStatus.roundEndedStage} />
                 </div>
                 {this.renderChips()}
                 {this.state.hasWineer === HasWineer.participateWon ?
@@ -380,7 +381,7 @@ class StartGame extends React.Component {
                 <div className='game_settings'>
                     {this.renderGameStatelayout()}
                     <div className='bet_amount'>
-                                Current Bet: {this.state.bet_amount}
+                                Current Bet: {this.getTotalPotChips()}
                                 <div/>
                                 Total Chips: {this.state.totalChips}
                     </div>
