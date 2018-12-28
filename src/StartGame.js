@@ -20,7 +20,7 @@ class StartGame extends React.Component {
     getTotalPotChips(){
         let totalPotChips = 0;
         for (let i =0; i < this.state.potChips.length; i++){
-            totalPotChips += (this.state.potChips[i][0]*this.state.potChips[i][1]); 
+            totalPotChips += (this.state.potChips[i].chipID*this.state.potChips[i].count); 
         }
         return totalPotChips;
     }
@@ -210,27 +210,17 @@ class StartGame extends React.Component {
             return;
         }
 
-
-        console.log('onRemoveBetHandler')
-        console.log(id)
-
-        console.log(this.state.potChips)
-        var chipIndex;
         for (var i = 0; i < this.state.potChips.length; i++)
         {
-            if (this.state.potChips[i][0] == id)
+            if (this.state.potChips[i].chipID == id)
             {
-                console.log('found')
-                console.log(i)
-
-                chipIndex = i;
-                this.state.potChips[i][1] -= 1;
+                this.state.potChips[i].count -= 1;
                 break;
             }
         }
 
         this.state.potChips.filter(function(ele){
-            return ele[1] > 0;
+            return ele.count > 0;
         });
 
         let totalChips = this.state.totalChips + id;
@@ -238,9 +228,6 @@ class StartGame extends React.Component {
     }
 
     onBetHandler = (id) => {
-        console.log('onBetHandler')
-        console.log(this.state.potChips)
-        console.log(this.state.roundInfo.stage)
         if (this.state.roundInfo.stage != RoundStage.Betting)
         {
             return;
@@ -250,20 +237,16 @@ class StartGame extends React.Component {
             var i = 0;
             for (; i < this.state.potChips.length; i++)
             {
-                if (this.state.potChips[i][0] == id)
+                if (this.state.potChips[i].chipID == id)
                 {
-                    console.log('found')
-                    console.log(i)
-
-                    this.state.potChips[i][1] += 1;
+                    this.state.potChips[i].count += 1;
                     break;
                 }
             }
             if (i === this.state.potChips.length)
             {
-                this.state.potChips.push([id,1]);
+                this.state.potChips.push({chipID: id, count:1});
             }
-            console.log(this.state.potChips)
 
             let totalChips = this.state.totalChips - id;
             this.setState({totalChips})
@@ -294,15 +277,13 @@ class StartGame extends React.Component {
         }
     }
 
-    renderBetSameChip(chipNumber){
+    renderBetSameChip(chipInfo){
         let betChips = [];
-        console.log('renderBetSameChip')
-        console.log(chipNumber)
 
-        for (var i = 0; i < chipNumber[1]; i++)
+        for (var i = 0; i < chipInfo.count; i++)
         {   
             let colorName;
-            switch (chipNumber[0]){
+            switch (chipInfo.chipID){
                 case 1:
                     colorName = 'small-chip red-chip'
                     break;
@@ -321,7 +302,7 @@ class StartGame extends React.Component {
             }
             console.log(colorName)
             betChips.push(<div > 
-                            <button className={colorName} key={i} onClick={()=>this.onRemoveBetHandler(chipNumber[0])}> </button>
+                            <button className={colorName} key={i} onClick={()=>this.onRemoveBetHandler(chipInfo.chipID)}> </button>
                          </div>)
         }
         return betChips
@@ -331,10 +312,10 @@ class StartGame extends React.Component {
         let betChips = [];
 
         for (var i = 0; i < this.state.potChips.length; i++) {
-            var elem = this.state.potChips[i];
-            if (elem[1] > 0)
+            var chipInfo = this.state.potChips[i];
+            if (chipInfo.count > 0)
             {
-                betChips.push(<div className={'same-chip'} key={i}> {this.renderBetSameChip(elem)} </div>)
+                betChips.push(<div className={'same-chip'} key={i}> {this.renderBetSameChip(chipInfo)} </div>)
             }
         }
         return betChips
