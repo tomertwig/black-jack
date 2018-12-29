@@ -253,18 +253,18 @@ class StartGame extends React.Component {
         {
             if (this.getTotalPotChips() > 0)
             {
-                return  <button className='buttons_layout' onClick={this.onFinishBetting}>Bet</button>                     
+                return (<div className='player-actions'>   
+                            <button className='buttons_layout' onClick={this.onFinishBetting}>Bet</button>    
+                        </div>)                 
             }
         }
         else{
-            if  (this.state.roundInfo.stage === RoundStage.RoundEnded)
-            {
-                setTimeout(this.startBetting, 2000)
-            }
-            else if (this.state.roundInfo.stage != RoundStage.DealingCards && this.state.roundInfo.stage != RoundStage.Standing)
+            if (this.state.roundInfo.stage != RoundStage.RoundEnded &&
+                this.state.roundInfo.stage != RoundStage.Standing &&
+                this.state.roundInfo.stage != RoundStage.DealingCards)
             {
                 return (
-                <div>
+                <div className='player-actions'>
                     <button className='hit-stand-buttons_layout' onClick={this.onHitHandler}> Hit </button>
                     <button className='hit-stand-buttons_layout' onClick={this.onStandHandler}> Stand </button> 
                 </div>)
@@ -335,11 +335,7 @@ class StartGame extends React.Component {
         )
     }
 
-    // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
-	render(){
-        console.log('this.state.roundResult')
-
-        console.log(this.state.roundInfo.result)
+    getPotClassName(){
         let potClassName = 'chips_pot ';
         if (this.state.roundInfo.result === RoundResult.DealerWon){
             potClassName += 'lost_chips_pot';
@@ -347,7 +343,29 @@ class StartGame extends React.Component {
         else if (this.state.roundInfo.result === RoundResult.ParticipateWon)
         {
             potClassName += 'participate_won';
+        }
+        return potClassName;
+    }
 
+    renderPotChips(){
+        let chipsPot = [];
+
+        if (this.state.roundInfo.result === RoundResult.ParticipateWon)
+        {
+            chipsPot.push(<div className= 'delear_chips_pot'> {this.renderBetChips()}</div>)
+        }
+        chipsPot.push(<div className={this.getPotClassName()}> {this.renderBetChips()}
+                         <span class="tooltiptext">Current Bet: {this.getTotalPotChips()}</span>
+                     </div>)
+        return chipsPot;
+    }
+
+
+    // TODO (tomert)- Add a trash talk string (choosing a random TT string from a list)
+	render(){
+        if  (this.state.roundInfo.stage === RoundStage.RoundEnded)
+        {
+            setTimeout(this.startBetting, 2000)
         }
 
         return (
@@ -357,13 +375,8 @@ class StartGame extends React.Component {
                     <Participate cards={this.state.participateCards} showCards={this.state.roundInfo.stage != RoundStage.RoundEnded} />
                 </div>
                 {this.renderChips()}
-                {this.state.roundInfo.result=== RoundResult.ParticipateWon ?
-                 <div className= 'delear_chips_pot'> {this.renderBetChips()}</div> : null
-                }
-                <div className={potClassName}> {this.renderBetChips()}
-                    <span class="tooltiptext">Current Bet: {this.getTotalPotChips()}</span>
-                </div>
-                <div className='player-actions'> {this.renderPlayerActionsButtons()} </div>
+                {this.renderPotChips()}
+                <div> {this.renderPlayerActionsButtons()} </div>
         </div>);
     }		
 }
