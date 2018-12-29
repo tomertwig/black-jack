@@ -1,12 +1,12 @@
 import React from 'react'
 import './card.css'
 
-interface CardProps {
-    suite: number;
-    rank: number;
-}
 
-class Card extends React.Component<CardProps, {}> {
+class Card extends React.Component{
+	constructor(rank, suite) {
+        super()
+        this.props = {rank, suite}
+      }
 
 	render(){
             let color;

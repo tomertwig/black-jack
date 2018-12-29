@@ -1,5 +1,5 @@
 import React from 'react'
-import {Participate} from './Participate.tsx'
+import {Participate} from './Participate.jsx'
 
 var RoundStage = Object.freeze({Betting:1, DealingCards:2 , HitOrStand:3, Standing:4, RoundEnded:5})       
 var RoundResult = Object.freeze({None:1, ParticipateWon:2, DealerWon:3, Duce:4 })       
@@ -77,7 +77,7 @@ class StartGame extends React.Component {
         this.setState({roundInfo:this.state.roundInfo});
     }
 
-	onHitHandler = (e) => {
+	onHitHandler = () => {
         if (this.state.roundInfo.stage != RoundStage.HitOrStand)
         {
             return;
@@ -121,27 +121,15 @@ class StartGame extends React.Component {
         }else{
             return bigSum;
         }
-        
-
-    }
-
-    hit(cards){
-        let card = this.getReandomCard()
-        cards.push(card);
-        let sums = this.getSums(cards)
-        let smallSum = sums[0];     
-        let bigSum = sums[1];
-        return [cards, smallSum, bigSum]
     }
 
     pullDealerCards = () => {
         let delearCards = this.state.delearCards
 
-        console.log('pullDealerCards')
-
         delearCards.push(this.getReandomCard())
 
         let maxDelearSum = this.getMaxSum(delearCards);
+        
         let roundResult = RoundResult.none;
         if (maxDelearSum > 16){
             if (maxDelearSum > 21)
@@ -166,9 +154,7 @@ class StartGame extends React.Component {
                             roundResult = RoundResult.DealerWon;
                         }
                     }
-                
                 }
-
             }
         }
         
@@ -193,18 +179,20 @@ class StartGame extends React.Component {
             this.state.roundInfo.result = roundResult;
             this.setState({totalChips:totalChips})}, 1000);
     }
-	onStandHandler = (e) => {
+    
+    onStandHandler = () => {
         if (this.state.roundInfo.stage != RoundStage.HitOrStand)
         {
             return;
         }
 
-        this.state.roundInfo.stage = RoundStage.Standing;
-        this.setState({})
+        let roundInfo  = this.state.roundInfo
+        roundInfo.stage = RoundStage.Standing;
+        this.setState({roundInfo})
         setTimeout(this.pullDealerCards, 1000)
     }
 
-    onRemoveBetHandler = (id) => {
+    onRemoveBetHandler = (chipID) => {
         if (this.state.roundInfo.stage != RoundStage.Betting)
         {
             return;
@@ -212,32 +200,39 @@ class StartGame extends React.Component {
 
         for (var i = 0; i < this.state.potChips.length; i++)
         {
-            if (this.state.potChips[i].chipID == id)
+            if (this.state.potChips[i].chipID == chipID)
             {
                 this.state.potChips[i].count -= 1;
                 break;
             }
         }
 
-        this.state.potChips.filter(function(ele){
-            return ele.count > 0;
-        });
+        let potChips = [];
+        for (var i = 0; i < this.state.potChips.length; i++)
+        {
+            if (this.state.potChips[i].count > 0)
+            {
+                potChips.push(this.state.potChips[i]);
+            }
+        }
 
-        let totalChips = this.state.totalChips + id;
+        this.state.potChips = potChips;
+
+        let totalChips = this.state.totalChips + chipID;
         this.setState({totalChips})
     }
 
-    onBetHandler = (id) => {
+    onBetHandler = (chipID) => {
         if (this.state.roundInfo.stage != RoundStage.Betting)
         {
             return;
         }
-        if (this.state.totalChips >= id)
+        if (this.state.totalChips >= chipID)
         {   
             var i = 0;
             for (; i < this.state.potChips.length; i++)
             {
-                if (this.state.potChips[i].chipID == id)
+                if (this.state.potChips[i].chipID == chipID)
                 {
                     this.state.potChips[i].count += 1;
                     break;
@@ -245,10 +240,10 @@ class StartGame extends React.Component {
             }
             if (i === this.state.potChips.length)
             {
-                this.state.potChips.push({chipID: id, count:1});
+                this.state.potChips.push({chipID: chipID, count:1});
             }
 
-            let totalChips = this.state.totalChips - id;
+            let totalChips = this.state.totalChips - chipID;
             this.setState({totalChips})
         }
     }
@@ -266,7 +261,7 @@ class StartGame extends React.Component {
             {
                 setTimeout(this.startBetting, 2000)
             }
-            else if (this.state.roundInfo.stage != RoundStage.DealingCards && this.state.roundInfo.stage != RoundStage.Standing )
+            else if (this.state.roundInfo.stage != RoundStage.DealingCards && this.state.roundInfo.stage != RoundStage.Standing)
             {
                 return (
                 <div className='buttons_layout'>
@@ -344,6 +339,16 @@ class StartGame extends React.Component {
         console.log('this.state.roundResult')
 
         console.log(this.state.roundInfo.result)
+        let potClassName = 'chips_pot ';
+        if (this.state.roundInfo.result === RoundResult.DealerWon){
+            potClassName += 'lost_chips_pot';
+        }
+        else if (this.state.roundInfo.result === RoundResult.ParticipateWon)
+        {
+            potClassName += 'participate_won';
+
+        }
+
         return (
         <div className='container'>
                 <div className='dealer_table'>
@@ -354,9 +359,7 @@ class StartGame extends React.Component {
                 {this.state.roundInfo.result=== RoundResult.ParticipateWon ?
                  <div className= 'delear_chips_pot'> {this.renderBetChips()}</div> : null
                 }
-                <div className= {this.state.roundInfo.result != RoundResult.DealerWon ?  'chips_pot' : 'chips_pot lost_chips_pot'}>
-                        {this.renderBetChips()}
-                </div>
+                <div className={potClassName}> {this.renderBetChips()} </div>
                 <div className='game_settings'>
                     {this.renderGameStatelayout()}
                     <div className='bet_amount'>

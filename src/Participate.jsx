@@ -1,13 +1,8 @@
 import React from 'react'
 import './card.css'
-import {Card} from './card.tsx'
+import {Card} from './card.jsx'
 
-interface ParticipateProps {
-    cards: [];
-    showCards:boolean;
-}
-
-class Participate extends React.Component<ParticipateProps, {} > {
+class Participate extends React.Component{
 	constructor(cards, showCards) {
         super()
         this.props = {cards, showCards}

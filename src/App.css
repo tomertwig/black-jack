@@ -92,18 +92,40 @@ body{
 		top: 300px;
 	}
 	99% {
-		left: 1000px;
-		top: 600px;
+		left: 700px;
+		top: 700px;
     opacity: 1;
   }
 	100% {
-		left: 1000px;
-		top: 610px;
+		left: 700px;
+		top: 740px;
     opacity: 0;
     display: none;	
 	}
 }	
 
+.participate_won{
+	animation: slide 2s 1 linear forwards;
+	animation-name: slide-to-participate_won ;
+}
+
+@keyframes slide-to-participate_won {
+  0% {
+		left: 1000px;
+		top: 600px;
+	}
+	99% {
+		left: 700px;
+		top: 700px;
+    opacity: 1;
+  }
+	100% {
+		left: 700px;
+		top: 740px;
+    opacity: 0;
+    display: none;	
+	}
+}	
 .chips_pot{
 	position: absolute;
 	transition:left 1s linear;
@@ -112,6 +134,10 @@ body{
 		flex-direction: row;
 	left: 1000px;
 	top: 600px;
+}
+
+.chips_pot:hover{
+	
 }
 
 .lost_chips_pot{
