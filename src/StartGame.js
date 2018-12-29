@@ -72,9 +72,27 @@ class StartGame extends React.Component {
         }
     }
 
+    isParticipateHasBlackJack(){
+        let participateCards = this.state.participateCards
+        let delearCards = this.state.delearCards
+        return participateCards.length ===2 && this.getMaxSum(participateCards) === 21 && this.getMaxSum(delearCards) < 21;
+    }
+
     moveToHitOrStandStage = () =>{
-        this.state.roundInfo.stage = RoundStage.HitOrStand;
-        this.setState({roundInfo:this.state.roundInfo});
+        let roundInfo = this.state.roundInfo
+        roundInfo.stage = RoundStage.HitOrStand;
+
+
+        if (this.isParticipateHasBlackJack())
+        {
+            roundInfo.stage = RoundStage.RoundEnded;
+            roundInfo.result = RoundResult.ParticipateWon;
+            this.setState({roundInfo});
+        }
+        else
+        {
+            this.setState({roundInfo});
+        }
     }
 
 	onHitHandler = () => {
@@ -129,7 +147,8 @@ class StartGame extends React.Component {
         delearCards.push(this.getReandomCard())
 
         let maxDelearSum = this.getMaxSum(delearCards);
-        
+        let maxParticipateSum = this.getMaxSum(this.state.participateCards);
+
         let roundResult = RoundResult.none;
         if (maxDelearSum > 16){
             if (maxDelearSum > 21)
@@ -140,7 +159,6 @@ class StartGame extends React.Component {
             {
                 if (maxDelearSum > 16)
                 {
-                    let maxParticipateSum = this.getMaxSum(this.state.participateCards);
                     if (maxParticipateSum > maxDelearSum)
                     {
                         roundResult = RoundResult.ParticipateWon;
@@ -167,7 +185,15 @@ class StartGame extends React.Component {
                 setTimeout(this.pullDealerCards, 1000)
                 return;
             case RoundResult.ParticipateWon:
-                totalChips = totalChips + (this.getTotalPotChips() * 2);
+                let profit;
+                if (this.isParticipateHasBlackJack())
+                {
+                    profit = parseInt((this.getTotalPotChips() * 2.5 + 1), 10);
+                } else
+                {
+                    profit = this.getTotalPotChips() * 2;
+                }
+                totalChips += profit;
                 break;
             case RoundResult.Duce:
                 totalChips += this.getTotalPotChips()
@@ -330,7 +356,7 @@ class StartGame extends React.Component {
                     <button className={blue_chip} onClick={()=>this.onBetHandler(25)}> 25 </button>
                     <button className={black_chip}  onClick={()=>this.onBetHandler(100)}> 100 </button>
                 </div>
-                <span class="tooltiptext">Total Chips: {this.state.totalChips}</span>
+                <span className="tooltiptext">Total Chips: {this.state.totalChips}</span>
             </div>
         )
     }
@@ -355,7 +381,7 @@ class StartGame extends React.Component {
             chipsPot.push(<div className= 'delear_chips_pot'> {this.renderBetChips()}</div>)
         }
         chipsPot.push(<div className={this.getPotClassName()}> {this.renderBetChips()}
-                         <span class="tooltiptext">Current Bet: {this.getTotalPotChips()}</span>
+                         <span className="tooltiptext">Current Bet: {this.getTotalPotChips()}</span>
                      </div>)
         return chipsPot;
     }
