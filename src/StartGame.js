@@ -248,12 +248,12 @@ class StartGame extends React.Component {
         }
     }
 
-    renderGameStatelayout(){
+    renderPlayerActionsButtons(){
         if (this.state.roundInfo.stage === RoundStage.Betting)
         {
             if (this.getTotalPotChips() > 0)
             {
-                return  <button className='round-ended' onClick={this.onFinishBetting}>Bet</button>                     
+                return  <button className='buttons_layout' onClick={this.onFinishBetting}>Bet</button>                     
             }
         }
         else{
@@ -264,9 +264,9 @@ class StartGame extends React.Component {
             else if (this.state.roundInfo.stage != RoundStage.DealingCards && this.state.roundInfo.stage != RoundStage.Standing)
             {
                 return (
-                <div className='buttons_layout'>
-                    <button className='round-ended' onClick={this.onHitHandler}> Hit </button>
-                    <button className='round-ended' onClick={this.onStandHandler}> Stand </button> 
+                <div>
+                    <button className='hit-stand-buttons_layout' onClick={this.onHitHandler}> Hit </button>
+                    <button className='hit-stand-buttons_layout' onClick={this.onStandHandler}> Stand </button> 
                 </div>)
             }
         }
@@ -330,6 +330,7 @@ class StartGame extends React.Component {
                     <button className={blue_chip} onClick={()=>this.onBetHandler(25)}> 25 </button>
                     <button className={black_chip}  onClick={()=>this.onBetHandler(100)}> 100 </button>
                 </div>
+                <span class="tooltiptext">Total Chips: {this.state.totalChips}</span>
             </div>
         )
     }
@@ -359,18 +360,12 @@ class StartGame extends React.Component {
                 {this.state.roundInfo.result=== RoundResult.ParticipateWon ?
                  <div className= 'delear_chips_pot'> {this.renderBetChips()}</div> : null
                 }
-                <div className={potClassName}> {this.renderBetChips()} </div>
-                <div className='game_settings'>
-                    {this.renderGameStatelayout()}
-                    <div className='bet_amount'>
-                                Current Bet: {this.getTotalPotChips()}
-                                <div/>
-                                Total Chips: {this.state.totalChips}
-                    </div>
+                <div className={potClassName}> {this.renderBetChips()}
+                    <span class="tooltiptext">Current Bet: {this.getTotalPotChips()}</span>
                 </div>
+                <div className='player-actions'> {this.renderPlayerActionsButtons()} </div>
         </div>);
-    }
-		
+    }		
 }
 
 
