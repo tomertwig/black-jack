@@ -85,8 +85,8 @@ class StartGame extends React.Component {
 
         if (this.isParticipateHasBlackJack())
         {
-            roundInfo.stage = RoundStage.RoundEnded;
             roundInfo.result = RoundResult.ParticipateWon;
+            this.onRoundHasWinner(roundInfo.result)
             this.setState({roundInfo});
         }
         else
@@ -175,20 +175,28 @@ class StartGame extends React.Component {
                 }
             }
         }
-        
-        let totalChips = this.state.totalChips
-
         this.setState({delearCards:delearCards})
 
+        if (roundResult === RoundResult.none)
+        {
+            setTimeout(this.pullDealerCards, 1000)
+        }
+        else{
+            this.onRoundHasWinner(roundResult)
+        }
+
+    }
+
+    onRoundHasWinner(roundResult)
+    {
+        let totalChips = this.state.totalChips
+
         switch(roundResult) {
-            case RoundResult.none:
-                setTimeout(this.pullDealerCards, 1000)
-                return;
             case RoundResult.ParticipateWon:
                 let profit;
                 if (this.isParticipateHasBlackJack())
                 {
-                    profit = parseInt((this.getTotalPotChips() * 2.5 + 1), 10);
+                    profit = Math.floor(this.getTotalPotChips() * 2.5 + 1);
                 } else
                 {
                     profit = this.getTotalPotChips() * 2;
