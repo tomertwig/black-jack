@@ -252,7 +252,7 @@ class StartGame extends React.Component {
         if (this.state.roundInfo.stage === RoundStage.Betting)
         {
             if (this.getTotalPotChips() > 0)
-            {
+                {
                 return (<div className='player-actions'>   
                             <button className='buttons_layout' onClick={this.onFinishBetting}>Bet</button>    
                         </div>)                 
