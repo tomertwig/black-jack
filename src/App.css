@@ -223,7 +223,7 @@ body{
 	position: absolute;
 	display: flex;
 	top: 800px;
-	right: 1130px;
+	right: 1180px;
 	flex-direction: row;
 }
 
@@ -292,13 +292,16 @@ body{
 	justify-content: space-between;
 	display: flex;
 	flex-direction: row;
-	right:55%;
+	right:1200px;
 	top: 700px;
 }
 
 .same-chip{
 	flex:1;
-	flex-direction: column;
+	flex-shrink:1;
+	flex-direction: row;
+	width: 100px;
+	height: 200px;
 }
 
 .small-chip {

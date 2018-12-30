@@ -409,8 +409,19 @@ class StartGame extends React.Component {
         for (var i = 0; i < this.state.potChips.length; i++) {
             var chipInfo = this.state.potChips[i];
             if (chipInfo.count > 0)
-            {
-                betChips.push(<div className={'same-chip'} key={i}> {this.renderBetSameChip(chipInfo)} </div>)
+            {   
+                var count = chipInfo.count;
+                console.log(chipInfo.count)
+                for (var j = 0; j < chipInfo.count ; j+=4)
+                {              
+                    let renderChipInfo = {chipID:chipInfo.chipID, count:Math.min(count, 4)}
+
+                    betChips.push(<div className={'same-chip'} key={i+j}> {this.renderBetSameChip(renderChipInfo)} </div>)
+                    if (count > 4)
+                    {
+                        count -= 4;
+                    }
+                }
             }
         }
         return betChips
