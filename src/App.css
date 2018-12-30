@@ -301,7 +301,7 @@ body{
 	flex-shrink:1;
 	flex-direction: row;
 	width: 100px;
-	height: 200px;
+	height: 50px;
 }
 
 .small-chip {
