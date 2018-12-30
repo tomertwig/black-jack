@@ -482,8 +482,9 @@ class StartGame extends React.Component {
 
         return (
         <div className='container'>
-                <div class="outer">
-                    <div class="deck-cards rotate">Dropbox</div>
+                <div className='deck'>
+                    <div className="deck-cards"></div>
+                    <div className="deck-cards"></div>
                 </div>
                 <div className='dealer_table'>
                     <Participate cards={this.state.delearCards} showCards={this.state.roundInfo.stage != RoundStage.RoundEnded} />

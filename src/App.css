@@ -384,28 +384,26 @@ border: 2px solid black;
 		}
 	}
 
+	.deck{
+		position: absolute;
+		display: flex; /* or inline-flex */
+
+		top: 190px;
+		left: 1450px;
+	}
+	
+	.deck-cards{
+		margin: -56px;
+		margin-left: -51px;
+		margin-bottom: -60px;
 
 
-.outer {
-  background-color: pink;
-  width: 40px;
-    position: absolute;
-    display: inline-block;
-		margin: 0 15px;
-		top: 20%;
-		left: 68%;
-}
-
-
-.deck-cards {
-  font-size: 13px;
-  position: absolute;
-  background: #DDD;
-}
-
-
-.rotate {
-	-moz-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
--webkit-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
-transform:  translateX(-50%) translateY(-50%) rotate(-90deg);
-}
+		border-radius: 8px;
+		background-image: url(./Dropbox_Logo.png);
+		transform: rotate(312deg);
+		background-color: white;
+		width: 100px ;
+		height: 150px;
+		border: 1px solid black;
+		box-shadow: 0px 3px 5px rgba(255, 255, 255, 0.212);
+	}
