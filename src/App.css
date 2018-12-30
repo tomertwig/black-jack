@@ -221,9 +221,9 @@ body{
 .player-actions{
 	position: absolute;
 	top: 80%;
-	right: 55%;
+	right: 58%;
 	flex-direction: row;
-	width:300px;
+	width:400px;
 	height: 200px;
 }
 
@@ -245,24 +245,37 @@ body{
 }
 
 .hit-stand-buttons_layout{
-	background-color:#D0D0D0;
+  background-color: #0099cc;
+	color: #ffffff;
+
 	width:100px;
 	height: 40px;
 
 	font-size: 30px;
 	font-size:1.5em;
-	border:1px solid black;
-	border-bottom: 5px solid black;
+  border: 1px solid #0099cc;
 	box-shadow: 0px 3px 5px white;
 }
 
 .hit-stand-buttons_layout:hover{
-	background-color: gold;
+  border: 1px solid #0099cc;
+  background-color: #00aacc;
+  color: #ffffff;
+  padding: 5px 10px;
 }
 
 .buttons_layout:hover{
 	background-color: gold;
 }
+
+.hit-stand-buttons_layout:disabled{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+	box-shadow: none;
+}
+
+
 .chip-button {
 	flex:1;
 	align-self:  flex-end;

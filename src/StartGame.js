@@ -1,7 +1,7 @@
 import React from 'react'
 import {Participate} from './Participate.jsx'
 
-var RoundStage = Object.freeze({Betting:1, DealingCards:2 , HitOrStand:3, Standing:4, RoundEnded:5})       
+var RoundStage = Object.freeze({Betting:1, DealingCards:2, Double:3 ,HitOrStand:4, Standing:5, RoundEnded:6})       
 var RoundResult = Object.freeze({None:1, ParticipateWon:2, DealerWon:3, Duce:4 })       
 
 class StartGame extends React.Component {
@@ -78,25 +78,50 @@ class StartGame extends React.Component {
         return participateCards.length ===2 && this.getMaxSum(participateCards) === 21 && this.getMaxSum(delearCards) < 21;
     }
 
+    getCardValue(card)
+    {   
+        let cardValue;
+        if (card.rank === 1){
+            cardValue = 1
+        } 
+        else if (card.rank > 10)
+        {
+            cardValue = 10
+        } 
+        else{
+            cardValue = card.rank;
+        } 
+        return cardValue;
+    }
+    
+    doubleAllowed(){
+        let cardsSum = this.getMaxSum(this.state.participateCards);
+        let totalChips = this.state.totalChips;
+        return (cardsSum <= 11 && cardsSum >=9) && totalChips >= this.getTotalPotChips();
+    }
+    
     moveToHitOrStandStage = () =>{
         let roundInfo = this.state.roundInfo
-        roundInfo.stage = RoundStage.HitOrStand;
-
 
         if (this.isParticipateHasBlackJack())
         {
             roundInfo.result = RoundResult.ParticipateWon;
             this.onRoundHasWinner(roundInfo.result)
             this.setState({roundInfo});
-        }
-        else
-        {
+        } else{
+            if (this.doubleAllowed()){
+                roundInfo.stage = RoundStage.Double;
+            }
+            else{
+                roundInfo.stage = RoundStage.HitOrStand;
+            }  
+            
             this.setState({roundInfo});
         }
     }
 
 	onHitHandler = () => {
-        if (this.state.roundInfo.stage != RoundStage.HitOrStand)
+        if (this.state.roundInfo.stage != RoundStage.HitOrStand && this.state.roundInfo.stage != RoundStage.Double)
         {
             return;
         }
@@ -214,8 +239,35 @@ class StartGame extends React.Component {
             this.setState({totalChips:totalChips})}, 1000);
     }
     
+    onDoubleHandler = () => {
+        if (this.state.roundInfo.stage != RoundStage.Double)
+        {
+            return;
+        }
+        let potChips = [];
+        for (var i = 0; i < this.state.potChips.length; i++)
+        {
+            for (var j = 0; j < this.state.potChips[i].count; j++)
+            {
+                potChips.push({chipID: this.state.potChips[i].chipID, count:this.state.potChips[i].count});
+            }
+        }
+        
+        for (var i = 0; i < potChips.length; i++)
+        {
+            for (var j = 0; j < potChips[i].count; j++)
+            {
+                console.log(potChips[i].chipID)
+                this.onBetHandler(potChips[i].chipID);
+            }
+        }
+        
+        this.onHitHandler()
+        this.onStandHandler()
+    }
+
     onStandHandler = () => {
-        if (this.state.roundInfo.stage != RoundStage.HitOrStand)
+        if (this.state.roundInfo.stage != RoundStage.HitOrStand && this.state.roundInfo.stage != RoundStage.Double)
         {
             return;
         }
@@ -257,7 +309,7 @@ class StartGame extends React.Component {
     }
 
     onBetHandler = (chipID) => {
-        if (this.state.roundInfo.stage != RoundStage.Betting)
+        if (this.state.roundInfo.stage != RoundStage.Betting && this.state.roundInfo.stage != RoundStage.Double)
         {
             return;
         }
@@ -268,6 +320,8 @@ class StartGame extends React.Component {
             {
                 if (this.state.potChips[i].chipID == chipID)
                 {
+                    console.log(chipID)
+
                     this.state.potChips[i].count += 1;
                     break;
                 }
@@ -283,27 +337,35 @@ class StartGame extends React.Component {
     }
 
     renderPlayerActionsButtons(){
-        if (this.state.roundInfo.stage === RoundStage.Betting)
+        let betButtonClass = 'disabled';
+        let hitAndStandButtonsClass = 'disabled';
+        let doubleButtonClass = 'disabled';
+
+        if (this.state.roundInfo.stage === RoundStage.Betting &&  (this.getTotalPotChips() > 0))
         {
-            if (this.getTotalPotChips() > 0)
-                {
-                return (<div className='player-actions'>   
-                            <button className='buttons_layout' onClick={this.onFinishBetting}>Bet</button>    
-                        </div>)                 
-            }
+            betButtonClass = ''             
         }
-        else{
-            if (this.state.roundInfo.stage != RoundStage.RoundEnded &&
-                this.state.roundInfo.stage != RoundStage.Standing &&
-                this.state.roundInfo.stage != RoundStage.DealingCards)
-            {
-                return (
-                <div className='player-actions'>
-                    <button className='hit-stand-buttons_layout' onClick={this.onHitHandler}> Hit </button>
-                    <button className='hit-stand-buttons_layout' onClick={this.onStandHandler}> Stand </button> 
-                </div>)
-            }
+        
+        if (this.state.roundInfo.stage != RoundStage.RoundEnded && this.state.roundInfo.stage != RoundStage.Betting){
+            
+            if (this.state.roundInfo.stage != RoundStage.Standing &&
+                this.state.roundInfo.stage != RoundStage.DealingCards){
+                    hitAndStandButtonsClass = '';
+                }
+
+            if (this.state.roundInfo.stage == RoundStage.Double){
+                doubleButtonClass = '';
+            } 
+
         }
+        
+        return (
+            <div className='player-actions'>
+                <button className='hit-stand-buttons_layout' disabled={betButtonClass}  onClick={this.onFinishBetting}>Bet</button>    
+                <button className='hit-stand-buttons_layout' disabled={hitAndStandButtonsClass} onClick={this.onHitHandler}> Hit </button>
+                <button className='hit-stand-buttons_layout' disabled={hitAndStandButtonsClass} onClick={this.onStandHandler}> Stand </button> 
+                <button className='hit-stand-buttons_layout' disabled={doubleButtonClass} onClick={this.onDoubleHandler}> Double </button> 
+            </div>)
     }
 
     renderBetSameChip(chipInfo){
