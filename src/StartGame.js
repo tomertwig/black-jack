@@ -478,7 +478,6 @@ class StartGame extends React.Component {
                 {this.renderChips()}
                 {this.renderPotChips()}
                 {this.renderPlayerActionsButtons()}
-                <img className='keys-img' src='keys.png' />
         </div>);
     }		
 }

@@ -329,6 +329,10 @@ border: 2px solid black;
 
 }
 
+.small-chip:hover {
+	cursor: pointer; 
+}
+
 .chip-button {
     float: left;
 	width: 80px;
