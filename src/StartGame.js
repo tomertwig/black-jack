@@ -374,30 +374,30 @@ class StartGame extends React.Component {
 
     renderBetSameChip(chipInfo){
         let betChips = [];
-
+        const isBettingStage = this.state.roundInfo.stage === RoundStage.Betting ? '' : 'disabled';
         for (var i = 0; i < chipInfo.count; i++)
         {   
             let colorName;
             switch (chipInfo.chipID){
                 case 1:
-                    colorName = 'small-chip red-chip'
+                    colorName = 'small-chip red-chip ' + isBettingStage
                     break;
                 case 5:
-                    colorName = 'small-chip orange-chip'
+                    colorName = 'small-chip orange-chip ' + isBettingStage
                     break;
                 case 10:
-                    colorName = 'small-chip purple-chip'
+                    colorName = 'small-chip purple-chip ' + isBettingStage
                     break;
                 case 25:
-                    colorName = 'small-chip blue-chip'
+                    colorName = 'small-chip blue-chip ' + isBettingStage
                     break;
                 case 100:
-                    colorName = 'small-chip black-chip'
+                    colorName = 'small-chip black-chip ' + isBettingStage
                     break;
             }
             console.log(colorName)
             betChips.push(<div > 
-                            <button className={colorName} key={i} onClick={()=>this.onRemoveBetHandler(chipInfo.chipID)}> </button>
+                            <button className={colorName}  key={i} onClick={()=>this.onRemoveBetHandler(chipInfo.chipID)}> </button>
                          </div>)
         }
         return betChips
@@ -471,6 +471,8 @@ class StartGame extends React.Component {
 
         return (
         <div className='container'>
+                <div className='deck-cards'> </div>
+
                 <div className='dealer_table'>
                     <Participate cards={this.state.delearCards} showCards={this.state.roundInfo.stage != RoundStage.RoundEnded} />
                     <Participate cards={this.state.participateCards} showCards={this.state.roundInfo.stage != RoundStage.RoundEnded} />
