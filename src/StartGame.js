@@ -412,11 +412,12 @@ class StartGame extends React.Component {
         return betChips
     }
     renderChips(){
-        let black_chip = this.state.totalChips >= 100 ? 'chip-button black-chip' : 'chip-button black-chip disabled';
-        let blue_chip = this.state.totalChips >= 25 ? 'chip-button blue-chip' : 'chip-button blue-chip disabled';
-        let purple_chip = this.state.totalChips >= 10 ? 'chip-button purple-chip' : 'chip-button purple-chip disabled';
-        let orange_chip = this.state.totalChips >= 5 ? 'chip-button orange-chip' : 'chip-button orange-chip disabled';
-        let red_chip = this.state.totalChips >= 1 ? 'chip-button red-chip' : 'chip-button red-chip disabled';
+        const isBettingStage = this.state.roundInfo.stage === RoundStage.Betting;
+        let black_chip = isBettingStage && this.state.totalChips >= 100 ? 'chip-button black-chip' : 'chip-button black-chip disabled';
+        let blue_chip = isBettingStage && this.state.totalChips >= 25 ? 'chip-button blue-chip' : 'chip-button blue-chip disabled';
+        let purple_chip = isBettingStage && this.state.totalChips >= 10 ? 'chip-button purple-chip' : 'chip-button purple-chip disabled';
+        let orange_chip = isBettingStage && this.state.totalChips >= 5 ? 'chip-button orange-chip' : 'chip-button orange-chip disabled';
+        let red_chip = isBettingStage && this.state.totalChips >= 1 ? 'chip-button red-chip' : 'chip-button red-chip disabled';
         return (
             <div className='chips_layout'>
                 <div className='chips'>

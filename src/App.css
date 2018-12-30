@@ -264,9 +264,6 @@ body{
   padding: 5px 10px;
 }
 
-.buttons_layout:hover{
-	background-color: gold;
-}
 
 .hit-stand-buttons_layout:disabled{
   border: 1px solid #999999;
