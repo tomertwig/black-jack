@@ -146,6 +146,9 @@ class StartGame extends React.Component {
             if (cards[i].rank === 1){
                 smallSum += 1
                 bigSum += 11
+                if (bigSum > 21){
+                    bigSum -=10;
+                }
             } 
             else if (cards[i].rank > 10)
             {
@@ -474,11 +477,9 @@ class StartGame extends React.Component {
                 {this.renderChips()}
                 {this.renderPotChips()}
                 <div> {this.renderPlayerActionsButtons()} </div>
+                <img className='keys-img' src='keys.png' />
         </div>);
     }		
 }
-
-
-
 
 export {StartGame};
