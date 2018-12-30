@@ -203,6 +203,7 @@ class StartGame extends React.Component {
                 }
             }
         }
+
         this.setState({delearCards:delearCards})
 
         if (roundResult === RoundResult.none)
@@ -364,10 +365,10 @@ class StartGame extends React.Component {
         
         return (
             <div className='player-actions'>
-                <button className='hit-stand-buttons_layout' disabled={betButtonClass}  onClick={this.onFinishBetting}>Bet</button>    
-                <button className='hit-stand-buttons_layout' disabled={hitAndStandButtonsClass} onClick={this.onHitHandler}> Hit </button>
-                <button className='hit-stand-buttons_layout' disabled={hitAndStandButtonsClass} onClick={this.onStandHandler}> Stand </button> 
-                <button className='hit-stand-buttons_layout' disabled={doubleButtonClass} onClick={this.onDoubleHandler}> Double </button> 
+                <button className='hit-stand-buttons_layout' disabled={betButtonClass}  onClick={this.onFinishBetting}>💰 BET</button>    
+                <button className='hit-stand-buttons_layout' disabled={hitAndStandButtonsClass} onClick={this.onHitHandler}> 👊 HIT </button>
+                <button className='hit-stand-buttons_layout' disabled={hitAndStandButtonsClass} onClick={this.onStandHandler}> ✋ STAND </button> 
+                <button className='hit-stand-buttons_layout' disabled={doubleButtonClass} onClick={this.onDoubleHandler}>🤩 DOUBLE </button> 
             </div>)
     }
 
@@ -440,7 +441,7 @@ class StartGame extends React.Component {
         if (this.state.roundInfo.result === RoundResult.DealerWon){
             potClassName += 'lost_chips_pot';
         }
-        else if (this.state.roundInfo.result === RoundResult.ParticipateWon)
+        else if (this.state.roundInfo.result === RoundResult.ParticipateWon || this.state.roundInfo.result === RoundResult.Duce )
         {
             potClassName += 'participate_won';
         }
@@ -476,7 +477,7 @@ class StartGame extends React.Component {
                 </div>
                 {this.renderChips()}
                 {this.renderPotChips()}
-                <div> {this.renderPlayerActionsButtons()} </div>
+                {this.renderPlayerActionsButtons()}
                 <img className='keys-img' src='keys.png' />
         </div>);
     }		

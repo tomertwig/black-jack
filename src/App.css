@@ -134,8 +134,9 @@ body{
 	position: absolute;
 	transition:left 1s linear;
 	display: flex;
+	max-height:100px;
 	width: 180px;
-		flex-direction: row;
+	flex-direction: row;
 	left: 1000px;
 	top: 600px;
 }
@@ -221,10 +222,8 @@ body{
 .player-actions{
 	position: absolute;
 	top: 80%;
-	right: 58%;
+	right: 55%;
 	flex-direction: row;
-	width:400px;
-	height: 200px;
 }
 
 .buttons_layout{
@@ -236,36 +235,38 @@ body{
 	background-color:#D0D0D0;
 	width:100px;
 	height: 40px;
-
 	font-size: 30px;
 	font-size:1.5em;
-	border:1px solid black;
-	border-bottom: 5px solid black;
-	box-shadow: 0px 3px 5px white;
+	box-shadow: 0px 3px 5px rgba(255, 255, 255, 0.212);
+	border:2px solid black;
+
 }
 
 .hit-stand-buttons_layout{
+	border-radius: 12px;
+	margin-right:5px ;
   background-color: #0099cc;
 	color: #ffffff;
-
-	width:100px;
 	height: 40px;
 
 	font-size: 30px;
 	font-size:1.5em;
-  border: 1px solid #0099cc;
-	box-shadow: 0px 3px 5px white;
+  border: 1px solid #999999;
+	box-shadow: 0px 3px 5px rgba(255, 255, 255, 0.212);
 }
 
 .hit-stand-buttons_layout:hover{
+	cursor: pointer; 
   border: 1px solid #0099cc;
   background-color: #00aacc;
   color: #ffffff;
-  padding: 5px 10px;
 }
 
 
 .hit-stand-buttons_layout:disabled{
+	cursor: default; 
+
+	opacity: 0.5;
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
@@ -305,7 +306,7 @@ body{
 	justify-content: space-between;
 	display: flex;
 	flex-direction: row;
-	right:1200px;
+	right:55%;
 	top: 700px;
 }
 
@@ -315,7 +316,7 @@ body{
 }
 
 .small-chip {
-margin: -15px;
+margin: -40px;
 width: 40px;
 height: 40px;
 
@@ -347,13 +348,21 @@ border: 2px solid black;
 .red-chip { background: #fd5f72 }
 .black-chip {background: #333 }
 
-.chip-button.disabled { opacity: 0.3 }
 
 .chip-button:hover {
 	-webkit-animation: 2s rotate-right linear infinite;
 			animation: 2s rotate-right linear infinite;
+   cursor: pointer; 
   }
-  
+
+	.chip-button.disabled { 
+		-webkit-animation: none;
+		animation: none;
+
+		cursor: default; 
+	
+		opacity: 0.5 
+	}
   @-webkit-keyframes rotate-right {
 	0% {
 	  -webkit-transform: rotate(0deg);
