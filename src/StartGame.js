@@ -1,5 +1,6 @@
 import React from 'react'
 import {Participate} from './Participate.jsx'
+import {Card} from './card.jsx'
 
 var RoundStage = Object.freeze({Betting:1, DealingCards:2, Double:3 ,HitOrStand:4, Standing:5, RoundEnded:6})       
 var RoundResult = Object.freeze({None:1, ParticipateWon:2, DealerWon:3, Duce:4 })       
@@ -66,8 +67,8 @@ class StartGame extends React.Component {
             this.state.roundInfo.stage = RoundStage.DealingCards;
             this.setState({roundInfo:this.state.roundInfo});
             setTimeout(() => { this.getCard(this.state.participateCards, 'participateCards')}, 800)
-            setTimeout(() => { this.getCard(this.state.delearCards, 'delearCards')}, 2100)
-            setTimeout(() => { this.getCard(this.state.participateCards, 'participateCards')}, 3300)
+            setTimeout(() => { this.getCard(this.state.delearCards, 'delearCards')}, 1500)
+            setTimeout(() => { this.getCard(this.state.participateCards, 'participateCards')}, 2200)
             setTimeout(this.moveToHitOrStandStage, 3300)
         }
     }
@@ -107,7 +108,7 @@ class StartGame extends React.Component {
         {
             setTimeout(() => {
                 roundInfo.result = RoundResult.ParticipateWon;;
-                this.onRoundHasWinner({roundInfo})}, 700);
+                this.onRoundHasWinner({roundInfo})}, 1200);
 
         } else{
             if (this.doubleAllowed()){
@@ -138,7 +139,7 @@ class StartGame extends React.Component {
                 let roundInfo = this.state.roundInfo
                 roundInfo.stage = RoundStage.RoundEnded;
                 roundInfo.result = RoundResult.DealerWon;
-                this.setState({roundInfo})}, 1500);
+                this.setState({roundInfo})}, 800);
         }
     }
 
@@ -212,7 +213,7 @@ class StartGame extends React.Component {
 
         if (roundResult === RoundResult.none)
         {
-            setTimeout(this.pullDealerCards, 1400)
+            setTimeout(this.pullDealerCards, 800)
         }
         else{
             this.onRoundHasWinner(roundResult)
@@ -244,7 +245,7 @@ class StartGame extends React.Component {
         setTimeout(() => {
             this.state.roundInfo.stage = RoundStage.RoundEnded;
             this.state.roundInfo.result = roundResult;
-            this.setState({totalChips:totalChips})}, 1300);
+            this.setState({totalChips:totalChips})}, 800);
     }
     
     onDoubleHandler = () => {
@@ -283,7 +284,7 @@ class StartGame extends React.Component {
         let roundInfo  = this.state.roundInfo
         roundInfo.stage = RoundStage.Standing;
         this.setState({roundInfo})
-        setTimeout(this.pullDealerCards, 1300)
+        setTimeout(this.pullDealerCards, 400)
     }
 
     onRemoveBetHandler = (chipID) => {

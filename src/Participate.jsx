@@ -12,10 +12,15 @@ class Participate extends React.Component{
 
         for (let i =0; i < this.props.cards.length; i++)
         {   
-            const className = this.props.isDealer? 'card-to-dealer': 'card-to-participate';
+            const className = this.props.isDealer? 'tomer-to-dealer': 'tomer-to-participate';
             const cardRendered = (
-                    <div className={className}>
-                        <Card className="card"  key={i} rank={this.props.cards[i].rank} suite={this.props.cards[i].suite}> </Card>
+                <div className='deck'>
+                        <div className={className}>
+                            <div className="card__face card__face--front" key={i}></div>
+                            <div className="card__face card__face--back" key={i}>
+                                <Card className="card"  key={i} rank={this.props.cards[i].rank} suite={this.props.cards[i].suite}> </Card>
+                            </div>
+                        </div>
                     </div>)
 
             cards.push(cardRendered)

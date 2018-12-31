@@ -27,7 +27,7 @@
 
 	.card-to-dealer{
 		position: relative;
-		animation: slide 1.3s 1 linear forwards;
+		animation: slide 0.8s 1 linear forwards;
 		animation-name: slide-card-to-dealer;
 	}
 
@@ -46,7 +46,7 @@
 	.card-to-participate{
 		position: relative;
 
-		animation: slide 1s 1 linear forwards;
+		animation: slide 0.5s 1 linear forwards;
 		animation-name: slide-card-to-participate;
 	}
 	
