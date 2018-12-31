@@ -498,7 +498,6 @@ border: 2px solid black;
 			left: -550px;
 			top: -85px;
 			transform:rotateY(180deg);
-			background-image: none;
 		}
 	}
 
@@ -524,11 +523,7 @@ border: 2px solid black;
 		100% {
 			left: -550px;
 			top: -70px;
-
 			transform:rotateY(180deg);
-
-			background-image: none;
-
 		}
 	}
 
