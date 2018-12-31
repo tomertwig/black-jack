@@ -3,9 +3,7 @@
 	.cards{
 		flex-direction: rows;
 		display: flex; /* or inline-flex */
-		margin-right: auto;
-		margin-left: 50%;
-		margin-top: 135px;
+		margin-top: 15px;
 		height: 1000px;
 	}
 
@@ -27,6 +25,43 @@
 
   }	
 
+	.card-to-dealer{
+		position: relative;
+		animation: slide 1.3s 1 linear forwards;
+		animation-name: slide-card-to-dealer;
+	}
+
+	@keyframes slide-card-to-dealer {
+		0% {
+			top: 80px;
+			left: 1350px;
+		}
+
+		100% {
+			left: 1050px;
+			top: 100px;
+		}
+	}	
+
+	.card-to-participate{
+		position: relative;
+
+		animation: slide 1s 1 linear forwards;
+		animation-name: slide-card-to-participate;
+	}
+	
+	@keyframes slide-card-to-participate {
+		0% {
+			top: -350px;
+			left: 1350px;
+		}
+
+		100% {
+
+			left: 1030px;
+			top: 120px;
+		}
+	}	
   .number{
 		display: block;
 		font-size: 2.3em;
@@ -45,29 +80,31 @@
 	color:red;
   }
   
-  .card-disappear{
+  .participate-card-disappear{
+	position: relative;
+
 	animation: disappear 2s 1;
 	display: flex; /* or inline-flex */
-    animation-fill-mode: forwards;
+  }
+  .dealer-card-disappear{
+	position: relative;
+	animation: disappear 2s 1;
+	display: flex; /* or inline-flex */
   }
 
   @keyframes disappear {
 	from{
-		flex-direction: row;
 
-		margin-right: auto;
-		margin-left: 50%;
-		margin-top: 135px;
-		height: 1000px;
+		opacity: 1;
+		top:14px;
+
 	}
-	to {
-		flex-direction: row;
-		display: flex; /* or inline-flex */
-		margin-right: auto;
-		margin-left: 50%;
-		margin-top: 135px;
-		height: 1000px;
+	to{
 		opacity: 0;
-		display: none;	
-    }
+		position: relative;
+		top:10px;
+		display: none;
+
+	}
+
   }	

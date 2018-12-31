@@ -66,9 +66,9 @@ class StartGame extends React.Component {
             this.state.roundInfo.stage = RoundStage.DealingCards;
             this.setState({roundInfo:this.state.roundInfo});
             setTimeout(() => { this.getCard(this.state.participateCards, 'participateCards')}, 800)
-            setTimeout(() => { this.getCard(this.state.delearCards, 'delearCards')}, 1800)
-            setTimeout(() => { this.getCard(this.state.participateCards, 'participateCards')}, 2500)
-            setTimeout(this.moveToHitOrStandStage, 2600)
+            setTimeout(() => { this.getCard(this.state.delearCards, 'delearCards')}, 2100)
+            setTimeout(() => { this.getCard(this.state.participateCards, 'participateCards')}, 3300)
+            setTimeout(this.moveToHitOrStandStage, 3300)
         }
     }
 
@@ -105,9 +105,10 @@ class StartGame extends React.Component {
 
         if (this.isParticipateHasBlackJack())
         {
-            roundInfo.result = RoundResult.ParticipateWon;
-            this.onRoundHasWinner(roundInfo.result)
-            this.setState({roundInfo});
+            setTimeout(() => {
+                roundInfo.result = RoundResult.ParticipateWon;;
+                this.onRoundHasWinner({roundInfo})}, 700);
+
         } else{
             if (this.doubleAllowed()){
                 roundInfo.stage = RoundStage.Double;
@@ -131,10 +132,13 @@ class StartGame extends React.Component {
         
         let maxSum = this.getMaxSum(participateCards)
         if (maxSum > 21 ){
-            let roundInfo = this.state.roundInfo
-            roundInfo.stage = RoundStage.RoundEnded;
-            roundInfo.result = RoundResult.DealerWon;
-            this.setState({roundInfo});
+
+            console.log('over 21!!!')
+            setTimeout(() => {
+                let roundInfo = this.state.roundInfo
+                roundInfo.stage = RoundStage.RoundEnded;
+                roundInfo.result = RoundResult.DealerWon;
+                this.setState({roundInfo})}, 1500);
         }
     }
 
@@ -208,7 +212,7 @@ class StartGame extends React.Component {
 
         if (roundResult === RoundResult.none)
         {
-            setTimeout(this.pullDealerCards, 1000)
+            setTimeout(this.pullDealerCards, 1400)
         }
         else{
             this.onRoundHasWinner(roundResult)
@@ -240,7 +244,7 @@ class StartGame extends React.Component {
         setTimeout(() => {
             this.state.roundInfo.stage = RoundStage.RoundEnded;
             this.state.roundInfo.result = roundResult;
-            this.setState({totalChips:totalChips})}, 1000);
+            this.setState({totalChips:totalChips})}, 1300);
     }
     
     onDoubleHandler = () => {
@@ -279,7 +283,7 @@ class StartGame extends React.Component {
         let roundInfo  = this.state.roundInfo
         roundInfo.stage = RoundStage.Standing;
         this.setState({roundInfo})
-        setTimeout(this.pullDealerCards, 1000)
+        setTimeout(this.pullDealerCards, 1300)
     }
 
     onRemoveBetHandler = (chipID) => {
@@ -479,7 +483,9 @@ class StartGame extends React.Component {
         {
             setTimeout(this.startBetting, 2000)
         }
+        console.log('this.state.participateCards')
 
+        console.log(this.state.participateCards)
         return (
         <div className='container'>
                 <div className='deck'>
@@ -487,8 +493,8 @@ class StartGame extends React.Component {
                     <div className="deck-cards"></div>
                 </div>
                 <div className='dealer_table'>
-                    <Participate cards={this.state.delearCards} showCards={this.state.roundInfo.stage != RoundStage.RoundEnded} />
-                    <Participate cards={this.state.participateCards} showCards={this.state.roundInfo.stage != RoundStage.RoundEnded} />
+                    <Participate cards={this.state.delearCards} showCards={this.state.roundInfo.stage != RoundStage.RoundEnded} isDealer={true} />
+                    <Participate cards={this.state.participateCards} showCards={this.state.roundInfo.stage != RoundStage.RoundEnded} isDealer={false} />
                 </div>
                 {this.renderChips()}
                 {this.renderPotChips()}
